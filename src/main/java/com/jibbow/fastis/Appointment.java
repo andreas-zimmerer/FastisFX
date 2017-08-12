@@ -21,11 +21,11 @@ public class Appointment {
         return intervalProperty;
     }
 
-    public  ObjectProperty<Temporal> startTimeProperty() {
-        return intervalProperty.get().startDateTimeProperty();
+    public Temporal startTimeProperty() {
+        return intervalProperty.get().getStartDateTime();
     }
 
-    public ObjectProperty<Temporal> endTimeProperty() {
-        return intervalProperty.get().endDateTimeProperty();
+    public Temporal endTimeProperty() {
+        return intervalProperty.get().getEndDateTime();
     }
 }

@@ -40,12 +40,24 @@ public class DayPane extends PercentPane {
     }
 
     public void addAppointment(Appointment appointment) {
-        Pane rendering = appointmentRenderer.apply(appointment);
-        appointments.put(appointment, rendering);
-        layoutAppointment(appointment);
-        this.getChildren().add(rendering);
+        appointments.put(appointment, createGuiElement(appointment));
+        appointment.intervalProperty().addListener(observable -> {
+            appointments.put(appointment, createGuiElement(appointment));
+            layoutAppointment(appointment);
+        });
+    }
 
-        appointment.intervalProperty().addListener(observable -> layoutAppointment(appointment));
+    private Pane createGuiElement(Appointment appointment) {
+        Pane rendering = null;
+        if(appointment.intervalProperty().get().overlaps(
+                new TimeInterval(
+                        LocalDateTime.of(dayDate, dayStartTime.get()),
+                        LocalDateTime.of(dayDate, dayEndTime.get())))) {
+            rendering = appointmentRenderer.apply(appointment);
+            layoutAppointment(appointment);
+            this.getChildren().add(rendering);
+        }
+        return rendering;
     }
 
     private void layoutAppointment(Appointment appointment) {
@@ -59,14 +71,14 @@ public class DayPane extends PercentPane {
             PercentPane.setTopAnchor(pane, 0.0);
         } else {
             PercentPane.setTopAnchor(pane,
-                    (double)TimeInterval.between(dayStartTime.get(), appointment.startTimeProperty().get()).getDuration().abs().toMinutes()
+                    (double)TimeInterval.between(dayStartTime.get(), appointment.startTimeProperty()).getDuration().abs().toMinutes()
                             / minutesPerDay);
         }
         if(appointment.intervalProperty().get().endsAfter(LocalDateTime.of(dayDate, dayEndTime.get()))) {
             PercentPane.setBottomAnchor(pane, 0.0);
         } else {
             PercentPane.setBottomAnchor(pane,
-                    (double)TimeInterval.between(dayEndTime.get(), appointment.endTimeProperty().get()).getDuration().abs().toMinutes()
+                    (double)TimeInterval.between(dayEndTime.get(), appointment.endTimeProperty()).getDuration().abs().toMinutes()
                             / minutesPerDay);
         }
 
