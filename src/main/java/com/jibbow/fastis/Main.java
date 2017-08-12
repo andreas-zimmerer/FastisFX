@@ -38,6 +38,8 @@ public class Main extends Application {
         root1.dayPane.addAppointment(app2);
         Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(17)));
         root1.dayPane.addAppointment(app3);
+        Appointment appfullday = new Appointment(true, LocalDate.now());
+        root1.dayPane.addAppointment(appfullday);
     }
 }
 

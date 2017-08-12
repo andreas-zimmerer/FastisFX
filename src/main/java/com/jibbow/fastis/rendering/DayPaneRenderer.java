@@ -97,26 +97,36 @@ public class DayPaneRenderer implements AppointmentRenderer {
                 (o1, o2) -> -(int)Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes())
                 .collect(Collectors.toList());
 
+        int numberoffulldayapp = 0;
         ListIterator<Appointment> iterator = sortedAppointments.listIterator();
         for(int index = 0; iterator.hasNext(); index++) {
             Appointment a = iterator.next();
-            // get overlapping appointments before
-            final TimeInterval interval = a.intervalProperty().get();
-            List<Appointment> stack = sortedAppointments.stream().limit(index).filter(appointment ->
-                    appointment.intervalProperty().get().overlaps(interval)
-            ).collect(Collectors.toList());
-
-            // increase the right margin of all stacked appointments, so that the new one is "on top"
-            for(int i=0;i<stack.size();i++) {
-                if(guiElements.get(stack.get(i)) != null) {
-                    PercentPane.setLeftAnchor(guiElements.get(stack.get(i)), i * 0.1);
-                    PercentPane.setRightAnchor(guiElements.get(stack.get(i)), 0.1 * (stack.size() - i));
+            if(a.isFullDayProperty().get()) {
+                if (guiElements.get(a) != null) {
+                    PercentPane.setLeftAnchor(guiElements.get(a), 0.0);
+                    guiElements.get(a).setMaxWidth(10.0);
+                    numberoffulldayapp++;
                 }
-            }
-            // new appointment is on top
-            if(guiElements.get(a) != null) {
-                PercentPane.setRightAnchor(guiElements.get(a), 0.0);
-                PercentPane.setLeftAnchor(guiElements.get(a), 0.1 * stack.size());
+            } else {
+                // get overlapping appointments before
+                final TimeInterval interval = a.intervalProperty().get();
+                List<Appointment> stack = sortedAppointments.stream().limit(index).filter(appointment ->
+                        appointment.intervalProperty().get().overlaps(interval)
+                ).filter(appointment -> !appointment.isFullDayProperty().get())
+                        .collect(Collectors.toList());
+
+                // increase the right margin of all stacked appointments, so that the new one is "on top"
+                for (int i = 0; i < stack.size(); i++) {
+                    if (guiElements.get(stack.get(i)) != null) {
+                        PercentPane.setLeftAnchor(guiElements.get(stack.get(i)), i * 0.1);
+                        PercentPane.setRightAnchor(guiElements.get(stack.get(i)), 0.1 * (stack.size() - i));
+                    }
+                }
+                // new appointment is on top
+                if (guiElements.get(a) != null) {
+                    PercentPane.setRightAnchor(guiElements.get(a), 0.0);
+                    PercentPane.setLeftAnchor(guiElements.get(a), 0.1 * stack.size());
+                }
             }
         }
     }
