@@ -38,6 +38,7 @@ public class DayView extends GridPane {
         ScrollPane scrollPane = new ScrollPane(dayPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
 
         RowConstraints headerRow = new RowConstraints(50, 50, 50);
         RowConstraints allDayRow = new RowConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, VPos.TOP, false);
@@ -47,9 +48,9 @@ public class DayView extends GridPane {
         ColumnConstraints columnConstraints = new ColumnConstraints(100, 200, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.CENTER, true);
         this.getColumnConstraints().add(columnConstraints);
 
-        this.add(headerPane, 0, 0);
-        this.add(allDayPane, 0 , 1);
         this.add(scrollPane, 0 , 2);
+        this.add(allDayPane, 0 , 1);
+        this.add(headerPane, 0, 0);
 
         populateHeaderPane(headerPane);
         populateAllDayPane(allDayPane);

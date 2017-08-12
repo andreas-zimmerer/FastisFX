@@ -25,21 +25,21 @@ public class Main extends Application {
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");
-        stage.setMinWidth(420.0);
-        stage.setMinHeight(500.0);
+        stage.setMinWidth(100);
+        stage.setMinHeight(100);
         stage.show();
 
         Appointment app = new Appointment(new TimeInterval(LocalDateTime.now().withHour(12).minusDays(1), LocalDateTime.now().withHour(14).minusDays(1)));
         root1.dayPane.addAppointment(app);
         root1.setStyle("-fx-background-color: lightgray");
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
-        app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(9), LocalDateTime.now().withHour(14)));
-        Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(10), LocalDateTime.now().withHour(15)));
-        root1.dayPane.addAppointment(app2);
-        Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(17)));
+        app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(9), LocalDateTime.now().withHour(11)));
+        //Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(10), LocalDateTime.now().withHour(15)));
+        //root1.dayPane.addAppointment(app2);
+        Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(18)));
         root1.dayPane.addAppointment(app3);
-        Appointment appfullday = new Appointment(true, LocalDate.now());
-        root1.dayPane.addAppointment(appfullday);
+        //Appointment appfullday = new Appointment(true, LocalDate.now());
+        //root1.dayPane.addAppointment(appfullday);
     }
 }
 

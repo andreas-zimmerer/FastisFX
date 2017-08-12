@@ -16,6 +16,11 @@
     -fx-text-fill: #bf360c;
 }
 
-.alldaypane {
+.headerpane {
+    -fx-background-color: whitesmoke;
+}
 
+.alldaypane {
+    -fx-background-color: whitesmoke;
+    -fx-effect: dropshadow( gaussian , #8F8F8FB0 , 14, 0.0 , 0 , 7 );
 }
