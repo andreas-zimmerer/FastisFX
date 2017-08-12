@@ -44,7 +44,6 @@ public class DayView extends GridPane {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
-        scrollPane.viewportBoundsProperty().addListener(observable -> allDayPane.setMaxWidth(scrollPane.getViewportBounds().getWidth() + 2));
 
         RowConstraints headerRow = new RowConstraints(50, 50, 50);
         RowConstraints allDayRow = new RowConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, VPos.TOP, false);
@@ -67,9 +66,6 @@ public class DayView extends GridPane {
     private void populateAllDayPane(Pane allDayPane) {
         Label day = new Label("display all day appointments");
         allDayPane.getChildren().add(day);
-        DropShadow shadow = new DropShadow(BlurType.GAUSSIAN,Color.valueOf("#8F8F8FB0"),8,0,0,8);
-        shadow.setWidth(0);
-        allDayPane.setEffect(shadow);
     }
 
     private void populateHeaderPane(Pane header) {
