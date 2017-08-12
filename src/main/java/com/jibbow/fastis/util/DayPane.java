@@ -3,7 +3,7 @@ package com.jibbow.fastis.util;
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.rendering.DayPaneRenderer;
 import javafx.beans.property.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class DayPane extends PercentPane {
     private LocalDate dayDate;
     private ObjectProperty<LocalTime> dayStartTime;
     private ObjectProperty<LocalTime> dayEndTime;
-    private Map<Appointment, Pane> appointments;
+    private Map<Appointment, Region> appointments;
     private DayPaneRenderer renderer;
 
 
@@ -57,7 +57,7 @@ public class DayPane extends PercentPane {
      * @param appointment The appointment that should be added to the DayPane.
      */
     public void addAppointment(Appointment appointment) {
-        Pane p = addGuiElement(appointment);
+        Region p = addGuiElement(appointment);
         appointments.put(appointment, p);
         renderer.layoutAppointments(appointments);
 
@@ -77,16 +77,16 @@ public class DayPane extends PercentPane {
      * appointment's time or the DayPanes time constraints has been changed - destroyed and
      * removed from the DayPane if this method is invoked after the change.
      *
-     * @param appointment The appointment to which a gui elemnt will be created and added to the
+     * @param appointment The appointment to which a gui element will be created and added to the
      *                    DayPane.
      *
      * @return  Returns null if no element has been created or if the element has been destroyed,
      *          both because the appointments datetime is outside of the time constraints of the
      *          DayPane. Otherwise the new gui element is returned.
      */
-    protected Pane addGuiElement(Appointment appointment) {
+    protected Region addGuiElement(Appointment appointment) {
         // check if there is an existing gui element
-        Pane pane = appointments.getOrDefault(appointment, null);
+        Region region = appointments.getOrDefault(appointment, null);
 
         // check if the appointment should be displayed
         if(appointment.intervalProperty().get().overlaps(
@@ -94,34 +94,34 @@ public class DayPane extends PercentPane {
                         LocalDateTime.of(dayDate, dayStartTime.get()),
                         LocalDateTime.of(dayDate, dayEndTime.get())))) {
 
-            if(pane == null) {
-                pane = renderer.createGuiElement(appointment);
+            if(region == null) {
+                region = renderer.createGuiElement(appointment);
             }
 
             // calculate minutes per day displayed; used for calculating the percentage
             long minutesPerDay = Duration.between(dayStartTime.get(), dayEndTime.get()).toMinutes();
 
             if(appointment.intervalProperty().get().startsBefore(LocalDateTime.of(dayDate, dayStartTime.get()))) {
-                PercentPane.setTopAnchor(pane, 0.0);
+                PercentPane.setTopAnchor(region, 0.0);
             } else {
-                PercentPane.setTopAnchor(pane,
+                PercentPane.setTopAnchor(region,
                         (double)TimeInterval.between(dayStartTime.get(), appointment.startTimeProperty()).getDuration().abs().toMinutes()
                                 / minutesPerDay);
             }
             if(appointment.intervalProperty().get().endsAfter(LocalDateTime.of(dayDate, dayEndTime.get()))) {
-                PercentPane.setBottomAnchor(pane, 0.0);
+                PercentPane.setBottomAnchor(region, 0.0);
             } else {
-                PercentPane.setBottomAnchor(pane,
+                PercentPane.setBottomAnchor(region,
                         (double)TimeInterval.between(dayEndTime.get(), appointment.endTimeProperty()).getDuration().abs().toMinutes()
                                 / minutesPerDay);
             }
 
-            this.getChildren().add(pane);
-            return pane;
+            this.getChildren().add(region);
+            return region;
         } else {
-            if(pane != null) {
+            if(region != null) {
                 // there is an existing gui element although is is not displayed -> remove it
-                this.getChildren().remove(pane);
+                this.getChildren().remove(region);
             }
             return null;
         }

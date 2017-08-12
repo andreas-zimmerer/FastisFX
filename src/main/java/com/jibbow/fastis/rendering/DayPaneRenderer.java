@@ -4,6 +4,7 @@ import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.util.PercentPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
     }
 
     @Override
-    public Pane createGuiElement(Appointment appointment) {
+    public Region createGuiElement(Appointment appointment) {
         Pane p = new Pane();
         p.getChildren().add(new Label("Appointment"));
         p.setStyle("-fx-background-color: red");
@@ -38,12 +39,12 @@ public class DayPaneRenderer implements AppointmentRenderer {
     }
 
     @Override
-    public void layoutAppointments(Map<Appointment, Pane> guiElements) {
+    public void layoutAppointments(Map<Appointment, Region> guiElements) {
         // implement overlapping style
-        guiElements.values().forEach(pane -> {
-            if(pane != null) {
-                PercentPane.setLeftAnchor(pane, 0.0);
-                PercentPane.setRightAnchor(pane, 0.0);
+        guiElements.values().forEach(region -> {
+            if(region != null) {
+                PercentPane.setLeftAnchor(region, 0.0);
+                PercentPane.setRightAnchor(region, 0.0);
             }
         });
     }

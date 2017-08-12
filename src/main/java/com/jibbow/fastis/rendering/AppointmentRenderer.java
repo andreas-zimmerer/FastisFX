@@ -1,8 +1,7 @@
 package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
-import javafx.scene.layout.Pane;
-
+import javafx.scene.layout.Region;
 import java.util.Map;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Map;
  */
 public interface AppointmentRenderer {
 
-    Pane createGuiElement(Appointment appointment);
+    Region createGuiElement(Appointment appointment);
 
-    void layoutAppointments(Map<Appointment, Pane> guiElements);
+    void layoutAppointments(Map<Appointment, Region> guiElements);
 }
