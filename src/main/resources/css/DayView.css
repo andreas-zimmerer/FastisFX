@@ -1,0 +1,17 @@
+.appointment {
+    -fx-background-color: #ffab91;
+    -fx-background-radius: 3.0;
+    -fx-border-radius: 3.0;
+    -fx-padding: 0 3 0 3;
+    -fx-background-insets: 0 3 0 3;
+}
+
+.appointment .leftbar {
+    -fx-background-color: #ff7043;
+    -fx-background-radius: 3 0 0 3;
+}
+
+.appointment .lblStartTime {
+    -fx-font-size: 10;
+    -fx-text-fill: #bf360c;
+}

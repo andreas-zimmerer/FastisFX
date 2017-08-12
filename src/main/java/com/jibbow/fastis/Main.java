@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        DayPane root1 =  new DayPane(LocalDate.now(), LocalTime.MIN, LocalTime.MAX);
+        DayView root1 =  new DayView();
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");
@@ -30,9 +30,10 @@ public class Main extends Application {
         stage.show();
 
         Appointment app = new Appointment(new TimeInterval(LocalDateTime.now().withHour(12).minusDays(1), LocalDateTime.now().withHour(14).minusDays(1)));
-        root1.addAppointment(app);
-        root1.setStyle("-fx-background-color: green");
+        root1.dayPane.addAppointment(app);
+        root1.setStyle("-fx-background-color: lightgray");
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
+        app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(9), LocalDateTime.now().withHour(14)));
     }
 }
 

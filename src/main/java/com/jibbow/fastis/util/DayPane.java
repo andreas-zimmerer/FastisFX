@@ -94,9 +94,10 @@ public class DayPane extends PercentPane {
                         LocalDateTime.of(dayDate, dayStartTime.get()),
                         LocalDateTime.of(dayDate, dayEndTime.get())))) {
 
-            if(region == null) {
-                region = renderer.createGuiElement(appointment);
+            if(region != null) {
+                this.getChildren().remove(region);
             }
+            region = renderer.createGuiElement(appointment);
 
             // calculate minutes per day displayed; used for calculating the percentage
             long minutesPerDay = Duration.between(dayStartTime.get(), dayEndTime.get()).toMinutes();

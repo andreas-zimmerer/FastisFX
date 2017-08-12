@@ -2,10 +2,14 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.util.PercentPane;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 /**
@@ -32,9 +36,24 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
     @Override
     public Region createGuiElement(Appointment appointment) {
-        Pane p = new Pane();
-        p.getChildren().add(new Label("Appointment"));
-        p.setStyle("-fx-background-color: red");
+        BorderPane p = new BorderPane();
+        p.getStyleClass().add("appointment");
+
+        VBox content = new VBox();
+
+        Label starttime = new Label(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(appointment.startTimeProperty()));
+        starttime.getStyleClass().add("lblStartTime");
+        content.getChildren().add(starttime);
+        Label title = new Label("Title");
+        content.getChildren().add(title);
+
+        Pane leftBar = new Pane();
+        leftBar.getStyleClass().add("leftbar");
+        leftBar.setPrefWidth(5.0);
+
+        p.setLeft(leftBar);
+        p.setCenter(content);
+        p.setMargin(content, new Insets(0.0, 5.0, 0.0, 5.0));
         return p;
     }
 
