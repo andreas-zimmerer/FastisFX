@@ -34,6 +34,10 @@ public class Main extends Application {
         root1.setStyle("-fx-background-color: lightgray");
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(9), LocalDateTime.now().withHour(14)));
+        Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(10), LocalDateTime.now().withHour(15)));
+        root1.dayPane.addAppointment(app2);
+        Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(17)));
+        root1.dayPane.addAppointment(app3);
     }
 }
 

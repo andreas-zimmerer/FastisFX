@@ -2,15 +2,21 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.util.PercentPane;
+import com.jibbow.fastis.util.TimeInterval;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jibbow on 8/11/17.
@@ -27,7 +33,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
 
     public DayPaneRenderer() {
-        this(OverlapStyle.FLEX);
+        this(OverlapStyle.STACKING);
     }
 
     public DayPaneRenderer(OverlapStyle style) {
@@ -59,12 +65,59 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
     @Override
     public void layoutAppointments(Map<Appointment, Region> guiElements) {
-        // implement overlapping style
-        guiElements.values().forEach(region -> {
-            if(region != null) {
-                PercentPane.setLeftAnchor(region, 0.0);
-                PercentPane.setRightAnchor(region, 0.0);
+        switch (style) {
+            case FLEX:
+                layoutAppointmentsFlex(guiElements);
+                break;
+            case STACKING:
+                layoutAppointmentsStacking(guiElements);
+                break;
+            case LANES:
+                break;
+        }
+    }
+
+    protected void layoutAppointmentsFlex(Map<Appointment, Region> guiElements) {
+        int numberoflanes = 1;
+        List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
+                (o1, o2) -> -(int)Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes())
+                .collect(Collectors.toList());
+
+        sortedAppointments.forEach(app -> {
+            Region reg = guiElements.get(app);
+            if(reg != null) {
+                PercentPane.setLeftAnchor(reg, 0.0);
+                PercentPane.setRightAnchor(reg, 0.0);
             }
         });
+    }
+
+    protected void layoutAppointmentsStacking(Map<Appointment, Region> guiElements) {
+        List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
+                (o1, o2) -> -(int)Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes())
+                .collect(Collectors.toList());
+
+        ListIterator<Appointment> iterator = sortedAppointments.listIterator();
+        for(int index = 0; iterator.hasNext(); index++) {
+            Appointment a = iterator.next();
+            // get overlapping appointments before
+            final TimeInterval interval = a.intervalProperty().get();
+            List<Appointment> stack = sortedAppointments.stream().limit(index).filter(appointment ->
+                    appointment.intervalProperty().get().overlaps(interval)
+            ).collect(Collectors.toList());
+
+            // increase the right margin of all stacked appointments, so that the new one is "on top"
+            for(int i=0;i<stack.size();i++) {
+                if(guiElements.get(stack.get(i)) != null) {
+                    PercentPane.setLeftAnchor(guiElements.get(stack.get(i)), i * 0.1);
+                    PercentPane.setRightAnchor(guiElements.get(stack.get(i)), 0.1 * (stack.size() - i));
+                }
+            }
+            // new appointment is on top
+            if(guiElements.get(a) != null) {
+                PercentPane.setRightAnchor(guiElements.get(a), 0.0);
+                PercentPane.setLeftAnchor(guiElements.get(a), 0.1 * stack.size());
+            }
+        }
     }
 }
