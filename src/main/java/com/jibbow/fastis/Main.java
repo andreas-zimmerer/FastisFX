@@ -1,6 +1,7 @@
 package com.jibbow.fastis;
 
 import com.jibbow.fastis.util.DayPane;
+import com.jibbow.fastis.util.TimeInterval;
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
@@ -30,7 +31,7 @@ public class Main extends Application {
         stage.setMinHeight(500.0);
         stage.show();
 
-        root1.addAppointment(new Appointment(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
+        root1.addAppointment(new Appointment(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14))));
         root1.setStyle("-fx-background-color: green");
     }
 }

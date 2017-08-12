@@ -23,6 +23,11 @@ public class DayPane extends PercentPane {
 
     Function<Appointment, Pane> appointmentRenderer = new AppointmentsRenderFactory()::renderDayVew;
 
+    public enum OverlapStyle {
+        Lanes,
+        Stacking
+    }
+
     public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime) {
         this.dayDate = date;
         this.dayStartTime = new SimpleObjectProperty<>(dayStartTime);
@@ -30,36 +35,43 @@ public class DayPane extends PercentPane {
 
         this.appointments = new HashMap<>();
 
-        this.dayStartTime.addListener(observable -> appointments.forEach(this::layoutAppointment));
-        this.dayEndTime.addListener(observable -> appointments.forEach(this::layoutAppointment));
+        this.dayStartTime.addListener(observable -> appointments.keySet().forEach(this::layoutAppointment));
+        this.dayEndTime.addListener(observable -> appointments.keySet().forEach(this::layoutAppointment));
     }
 
     public void addAppointment(Appointment appointment) {
         Pane rendering = appointmentRenderer.apply(appointment);
         appointments.put(appointment, rendering);
-        layoutAppointment(appointment, rendering);
+        layoutAppointment(appointment);
         this.getChildren().add(rendering);
 
-        appointment.startDateTimeProperty().addListener(observable -> layoutAppointment(appointment, rendering));
-        appointment.endDateTimeProperty().addListener(observable -> layoutAppointment(appointment, rendering));
+        appointment.intervalProperty().addListener(observable -> layoutAppointment(appointment));
     }
 
-    private void layoutAppointment(Appointment appointment, Pane pane) {
+    private void layoutAppointment(Appointment appointment) {
+        Pane pane = appointments.get(appointment);
+        if(pane == null) { return; } // no pane is associated with this appointment so nothing has to be done
+
+        // calculate minutes per day displayed; used for calculating the percentage
         long minutesPerDay = Duration.between(dayStartTime.get(), dayEndTime.get()).toMinutes();
 
-        if(appointment.startDateTimeProperty().get().isBefore(LocalDateTime.of(dayDate, dayStartTime.get()))) {
+        if(appointment.intervalProperty().get().startsBefore(LocalDateTime.of(dayDate, dayStartTime.get()))) {
             PercentPane.setTopAnchor(pane, 0.0);
         } else {
             PercentPane.setTopAnchor(pane,
-                    (double)Duration.between(dayStartTime.get(), appointment.startDateTimeProperty().get().toLocalTime()).toMinutes()
+                    (double)TimeInterval.between(dayStartTime.get(), appointment.startTimeProperty().get()).getDuration().abs().toMinutes()
                             / minutesPerDay);
         }
-        if(appointment.endDateTimeProperty().get().isAfter(LocalDateTime.of(dayDate, dayEndTime.get()))) {
+        if(appointment.intervalProperty().get().endsAfter(LocalDateTime.of(dayDate, dayEndTime.get()))) {
             PercentPane.setBottomAnchor(pane, 0.0);
         } else {
             PercentPane.setBottomAnchor(pane,
-                    (double)Duration.between(appointment.endDateTimeProperty().get().toLocalTime(), dayEndTime.get()).toMinutes()
+                    (double)TimeInterval.between(dayEndTime.get(), appointment.endTimeProperty().get()).getDuration().abs().toMinutes()
                             / minutesPerDay);
         }
+
+        // implement overlapping style
+        PercentPane.setLeftAnchor(pane, 0.0);
+        PercentPane.setRightAnchor(pane, 0.0);
     }
 }
