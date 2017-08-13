@@ -56,13 +56,16 @@ public class DayView extends CalendarView {
 
         this.headerPane = renderer.createHeaderPane(this);
         this.dayPane = new DayPane(LocalDate.now());
-        this.dayPane.getStyleClass().add("daypane");
         this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
         this.timeIndicator = new TimeIndicator(dayPane);
         this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()
                 .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
 
+        setLayout();
+    }
 
+
+    private void setLayout() {
         // set layout for this pane
         RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
         RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
