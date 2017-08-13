@@ -15,7 +15,6 @@ import javafx.scene.layout.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,9 +34,11 @@ public class DayView extends CalendarView {
     public DayView(LocalDate date) {
         this(new SimpleObjectProperty<>(date));
     }
+
     public DayView(ObjectProperty<LocalDate> date) {
         this(date, new DayViewRenderer());
     }
+
     public DayView(ObjectProperty<LocalDate> date, DayViewRenderer renderer, Calendar... calendar) {
         this.getStylesheets().add(DayView.class.getClassLoader().getResource("css/DayView.css").toString());
         this.setPrefWidth(300);
@@ -45,7 +46,7 @@ public class DayView extends CalendarView {
 
         // set date and displayed calendars
         this.date = date;
-        for(int i=0;i<calendar.length;i++) {
+        for (int i = 0; i < calendar.length; i++) {
             this.getCalendars().add(calendar[i]);
         }
 
@@ -83,19 +84,23 @@ public class DayView extends CalendarView {
         // holds a column for the TimeAxis on the left side and the DayPane on the right side
         GridPane dayPaneHolder = new GridPane();
         ColumnConstraints timeColumn = new ColumnConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false);
-        ColumnConstraints appointmentsColumn = new ColumnConstraints(100,100,Double.POSITIVE_INFINITY,Priority.ALWAYS,HPos.CENTER,true);
-        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE,USE_COMPUTED_SIZE,Double.POSITIVE_INFINITY,Priority.ALWAYS,VPos.TOP,true);
+        ColumnConstraints appointmentsColumn = new ColumnConstraints(100, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
+        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true);
         dayPaneHolder.getColumnConstraints().addAll(timeColumn, appointmentsColumn);
         dayPaneHolder.getRowConstraints().add(rowConstraint);
 
 
         dayPaneHolder.add(timeAxis, 0, 0);
-        dayPaneHolder.add(timeIndicator,1,0);
+        dayPaneHolder.add(timeIndicator, 1, 0);
         scrollPane.setContent(dayPaneHolder);
 
         // ordering is important:
         this.add(scrollPane, 0, 2);
         this.add(allDayPane, 0, 1);
         this.add(headerPane, 0, 0);
+    }
+
+    public ObjectProperty<LocalDate> getDate() {
+        return date;
     }
 }

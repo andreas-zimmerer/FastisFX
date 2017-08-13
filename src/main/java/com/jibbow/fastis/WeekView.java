@@ -27,10 +27,8 @@ public class WeekView extends CalendarView {
 
 
     private void populateDayViews(LocalDate oldValue, LocalDate newValue) {
-        if(oldValue == null || newValue == null) {
+        if (oldValue == null || newValue == null) {
             weekPane.getChildren().clear();
         }
-
-
     }
 }

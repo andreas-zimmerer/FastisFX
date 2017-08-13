@@ -2,10 +2,12 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.DayView;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.scene.layout.HBox;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -22,11 +24,18 @@ public class DayViewRenderer extends DayPaneRenderer {
     }
 
     public Node createHeaderPane(DayView dayView) {
-        AnchorPane p = new AnchorPane();
-        Label day = new Label("Mo");
-        p.getChildren().add(day);
-        p.getStyleClass().add("headerpane");
-        p.setMinHeight(50);
-        return p;
+        HBox container = new HBox();
+        container.setAlignment(Pos.BOTTOM_LEFT);
+        container.getStyleClass().add("headerpane");
+
+        Label lblWeekday = new Label(dayView.getDate().get().format(DateTimeFormatter.ofPattern("EEE")));
+        lblWeekday.getStyleClass().add("label-weekday");
+
+        Label lblDate = new Label(dayView.getDate().get().toString());
+        lblDate.getStyleClass().add("label-date");
+
+        container.getChildren().add(lblWeekday);
+        container.getChildren().add(lblDate);
+        return container;
     }
 }

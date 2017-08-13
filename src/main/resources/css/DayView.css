@@ -40,3 +40,12 @@
     -fx-fill: blue;
     -fx-stroke: blue;
 }
+
+.label-weekday {
+    -fx-font-size: 22;
+    -fx-padding: 5 10 10 4;
+}
+
+.label-date {
+    -fx-padding: 5 0 11 0;
+}

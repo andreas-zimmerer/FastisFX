@@ -77,12 +77,12 @@ public class DayPaneRenderer implements AppointmentRenderer {
     protected void layoutAppointmentsFlex(Map<Appointment, Region> guiElements) {
         int numberoflanes = 1;
         List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
-                (o1, o2) -> -(int)Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes())
+                (o1, o2) -> -(int) Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes())
                 .collect(Collectors.toList());
 
         sortedAppointments.forEach(app -> {
             Region reg = guiElements.get(app);
-            if(reg != null) {
+            if (reg != null) {
                 PercentPane.setLeftAnchor(reg, 0.0);
                 PercentPane.setRightAnchor(reg, 0.0);
             }
@@ -91,14 +91,14 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
     protected void layoutAppointmentsStacking(Map<Appointment, Region> guiElements) {
         List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
-                (o1, o2) -> -(int)Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes())
+                (o1, o2) -> -(int) Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes())
                 .collect(Collectors.toList());
 
         int numberoffulldayapp = 0;
         ListIterator<Appointment> iterator = sortedAppointments.listIterator();
-        for(int index = 0; iterator.hasNext(); index++) {
+        for (int index = 0; iterator.hasNext(); index++) {
             Appointment a = iterator.next();
-            if(a.isFullDayProperty().get()) {
+            if (a.isFullDayProperty().get()) {
                 if (guiElements.get(a) != null) {
                     PercentPane.setLeftAnchor(guiElements.get(a), 0.0);
                     guiElements.get(a).setMaxWidth(10.0);
