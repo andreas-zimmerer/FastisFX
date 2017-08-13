@@ -1,3 +1,7 @@
+.root {
+
+}
+
 .appointment {
     -fx-background-color: #ffab91;
     -fx-background-radius: 3.0;
@@ -17,15 +21,17 @@
 }
 
 .headerpane {
-    -fx-background-color: whitesmoke;
+    -fx-background-color: white;
 }
 
 .alldaypane {
-    -fx-background-color: whitesmoke;
+    -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
 }
 
 .time-indicator-label {
     -fx-font-size: 10;
     -fx-text-fill: darkgray;
+    -fx-translate-y: -5;
+    -fx-padding: 0 15 0 4;
 }
