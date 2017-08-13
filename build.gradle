@@ -28,7 +28,7 @@ apply plugin: 'javafx-gradle-plugin'
 
 jfx {
     // minimal requirement for jfxJar-task
-    mainClass = 'com.jibbow.fastis.Main'
+    mainClass = 'demo.Main'
     jfxAppOutputDir = "build/jfx/app"
     jfxMainAppJarName = "fastis.jar"
 
