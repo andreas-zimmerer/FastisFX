@@ -2,6 +2,7 @@ package com.jibbow.fastis;
 
 import com.jibbow.fastis.util.DayPane;
 import com.jibbow.fastis.util.PercentPane;
+import com.jibbow.fastis.util.TimeIndicator;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
@@ -10,7 +11,9 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Created by Jibbow on 8/12/17.
@@ -41,13 +44,15 @@ public class DayView extends GridPane {
 
         // holds column for time labels on the left side and the DayPane on the right side
         GridPane dayPaneHolder = new GridPane();
-        ColumnConstraints timeColumn = new ColumnConstraints(40,40,40);
+        ColumnConstraints timeColumn = new ColumnConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false);
         ColumnConstraints appointmentscolumn = new ColumnConstraints(100,100,Double.POSITIVE_INFINITY,Priority.ALWAYS,HPos.CENTER,true);
         dayPaneHolder.getColumnConstraints().addAll(timeColumn, appointmentscolumn);
         RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE,USE_COMPUTED_SIZE,Double.POSITIVE_INFINITY,Priority.ALWAYS,VPos.TOP,true);
         dayPaneHolder.getRowConstraints().add(rowConstraint);
 
+        TimeIndicator timeIndicator = new TimeIndicator(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
 
+        dayPaneHolder.add(timeIndicator, 0, 0);
         dayPaneHolder.add(dayPane,1,0);
         scrollPane.setContent(dayPaneHolder);
 

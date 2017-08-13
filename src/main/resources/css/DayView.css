@@ -24,3 +24,8 @@
     -fx-background-color: whitesmoke;
     -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
 }
+
+.time-indicator-label {
+    -fx-font-size: 10;
+    -fx-text-fill: darkgray;
+}
