@@ -3,7 +3,6 @@ package com.jibbow.fastis.util;
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.rendering.DayPaneRenderer;
 import javafx.beans.property.*;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
 import java.time.Duration;

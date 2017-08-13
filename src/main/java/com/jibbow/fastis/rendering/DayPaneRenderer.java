@@ -10,9 +10,6 @@ import javafx.scene.layout.*;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -50,7 +47,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
         Label starttime = new Label(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(appointment.startTimeProperty()));
         starttime.getStyleClass().add("lblStartTime");
         content.getChildren().add(starttime);
-        Label title = new Label("Title");
+        Label title = new Label(appointment.titleProperty().get());
         content.getChildren().add(title);
 
         Pane leftBar = new Pane();

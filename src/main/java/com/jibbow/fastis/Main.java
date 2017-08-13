@@ -1,14 +1,11 @@
 package com.jibbow.fastis;
 
-import com.jibbow.fastis.util.DayPane;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Created by Jibbow on 8/11/17.
@@ -29,14 +26,13 @@ public class Main extends Application {
         stage.setMinHeight(100);
         stage.show();
 
-        Appointment app = new Appointment(new TimeInterval(LocalDateTime.now().withHour(12).minusDays(1), LocalDateTime.now().withHour(14).minusDays(1)));
+        Appointment app = new Appointment(new TimeInterval(LocalDateTime.now().withHour(12).minusDays(1), LocalDateTime.now().withHour(14).minusDays(1)),"Meeting");
         root1.dayPane.addAppointment(app);
-        root1.setStyle("-fx-background-color: lightgray");
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(9), LocalDateTime.now().withHour(11)));
         //Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(10), LocalDateTime.now().withHour(15)));
         //root1.dayPane.addAppointment(app2);
-        Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(18)));
+        Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().withHour(16), LocalDateTime.now().withHour(18)), "Phone call");
         root1.dayPane.addAppointment(app3);
         //Appointment appfullday = new Appointment(true, LocalDate.now());
         //root1.dayPane.addAppointment(appfullday);
