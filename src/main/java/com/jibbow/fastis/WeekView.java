@@ -11,7 +11,7 @@ import java.time.LocalDate;
 /**
  * Created by Jibbow on 8/12/17.
  */
-public class WeekCalendar {
+public class WeekView extends CalendarView {
     IntegerProperty numberOfDaysProperty = new SimpleIntegerProperty(7); // show one week per default
     ObjectProperty<LocalDate> dateBeginProperty;
 
@@ -19,7 +19,7 @@ public class WeekCalendar {
     GridPane allDayPane = new GridPane();
     GridPane timeIndicatorPane = new GridPane();
 
-    public WeekCalendar(LocalDate dateBegin) {
+    public WeekView(LocalDate dateBegin) {
         this.dateBeginProperty = new SimpleObjectProperty<>(dateBegin);
 
         dateBeginProperty.addListener((observable, oldValue, newValue) -> populateDayViews(oldValue, newValue));
