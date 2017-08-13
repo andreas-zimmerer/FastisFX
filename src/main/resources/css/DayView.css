@@ -35,3 +35,8 @@
     -fx-translate-y: -5;
     -fx-padding: 0 15 0 4;
 }
+
+.timeindicator {
+    -fx-fill: blue;
+    -fx-stroke: blue;
+}

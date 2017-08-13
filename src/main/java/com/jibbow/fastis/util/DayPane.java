@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class DayPane extends PercentPane {
     private LocalDate dayDate;
-    private ObjectProperty<LocalTime> dayStartTime;
-    private ObjectProperty<LocalTime> dayEndTime;
+    private ObjectProperty<LocalTime> dayStartTimeProperty;
+    private ObjectProperty<LocalTime> dayEndTimeProperty;
     private Map<Appointment, Region> appointments;
     private DayPaneRenderer renderer;
 
@@ -33,19 +33,19 @@ public class DayPane extends PercentPane {
 
     public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime, DayPaneRenderer renderer) {
         this.dayDate = date;
-        this.dayStartTime = new SimpleObjectProperty<>(dayStartTime);
-        this.dayEndTime = new SimpleObjectProperty<>(dayEndTime);
+        this.dayStartTimeProperty = new SimpleObjectProperty<>(dayStartTime);
+        this.dayEndTimeProperty = new SimpleObjectProperty<>(dayEndTime);
         this.renderer = renderer;
 
         this.setPrefHeight(Duration.between(dayStartTime, dayEndTime).toMinutes() / 2);
 
         this.appointments = new HashMap<>();
 
-        this.dayStartTime.addListener(observable -> {
+        this.dayStartTimeProperty().addListener(observable -> {
             appointments.keySet().forEach(this::addGuiElement);
             renderer.layoutAppointments(appointments);
         });
-        this.dayEndTime.addListener(observable -> {
+        this.dayEndTimeProperty().addListener(observable -> {
             appointments.keySet().forEach(this::addGuiElement);
             renderer.layoutAppointments(appointments);
         });
@@ -94,8 +94,8 @@ public class DayPane extends PercentPane {
         // check if the appointment should be displayed
         if(appointment.intervalProperty().get().overlaps(
                 new TimeInterval(
-                        LocalDateTime.of(dayDate, dayStartTime.get()),
-                        LocalDateTime.of(dayDate, dayEndTime.get())))) {
+                        LocalDateTime.of(getDayDate(), dayStartTimeProperty().get()),
+                        LocalDateTime.of(getDayDate(), dayEndTimeProperty().get())))) {
 
             if(region != null) {
                 this.getChildren().remove(region);
@@ -103,20 +103,20 @@ public class DayPane extends PercentPane {
             region = renderer.createGuiElement(appointment);
 
             // calculate minutes per day displayed; used for calculating the percentage
-            long minutesPerDay = Duration.between(dayStartTime.get(), dayEndTime.get()).toMinutes();
+            long minutesPerDay = Duration.between(dayStartTimeProperty().get(), dayEndTimeProperty().get()).toMinutes();
 
-            if(appointment.intervalProperty().get().startsBefore(LocalDateTime.of(dayDate, dayStartTime.get()))) {
+            if(appointment.intervalProperty().get().startsBefore(LocalDateTime.of(getDayDate(), dayStartTimeProperty().get()))) {
                 PercentPane.setTopAnchor(region, 0.0);
             } else {
                 PercentPane.setTopAnchor(region,
-                        (double)TimeInterval.between(dayStartTime.get(), appointment.startTimeProperty()).getDuration().abs().toMinutes()
+                        (double)TimeInterval.between(dayStartTimeProperty().get(), appointment.startTimeProperty()).getDuration().abs().toMinutes()
                                 / minutesPerDay);
             }
-            if(appointment.intervalProperty().get().endsAfter(LocalDateTime.of(dayDate, dayEndTime.get()))) {
+            if(appointment.intervalProperty().get().endsAfter(LocalDateTime.of(getDayDate(), dayEndTimeProperty().get()))) {
                 PercentPane.setBottomAnchor(region, 0.0);
             } else {
                 PercentPane.setBottomAnchor(region,
-                        (double)TimeInterval.between(dayEndTime.get(), appointment.endTimeProperty()).getDuration().abs().toMinutes()
+                        (double)TimeInterval.between(dayEndTimeProperty().get(), appointment.endTimeProperty()).getDuration().abs().toMinutes()
                                 / minutesPerDay);
             }
 
@@ -129,5 +129,17 @@ public class DayPane extends PercentPane {
             }
             return null;
         }
+    }
+
+    public LocalDate getDayDate() {
+        return dayDate;
+    }
+
+    public ObjectProperty<LocalTime> dayStartTimeProperty() {
+        return dayStartTimeProperty;
+    }
+
+    public ObjectProperty<LocalTime> dayEndTimeProperty() {
+        return dayEndTimeProperty;
     }
 }

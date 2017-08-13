@@ -1,74 +1,101 @@
 package com.jibbow.fastis.util;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.VPos;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Created by Jibbow on 8/13/17.
  */
-public class TimeIndicator extends GridPane {
-    private ObjectProperty<LocalTime> timeStartProperty;
-    private ObjectProperty<LocalTime> timeEndProperty;
-    private ObjectProperty<Duration> timeStepsProperty;
-    private DateTimeFormatter formatter;
+public class TimeIndicator extends PercentPane {
 
+    Node indicator;
+    ObjectProperty<LocalTime> startTime;
+    ObjectProperty<LocalTime> endTime;
+    LocalDate date;
 
-    public TimeIndicator(LocalTime timeStart, LocalTime timeEnd, Duration timeSteps) {
-        this(new SimpleObjectProperty<>(timeStart), new SimpleObjectProperty<>(timeEnd), new SimpleObjectProperty<>(timeSteps));
-    }
-    public TimeIndicator(ObjectProperty<LocalTime> timeStart, ObjectProperty<LocalTime> timeEnd, ObjectProperty<Duration> timeSteps) {
-        this(timeStart, timeEnd, timeSteps, DateTimeFormatter.ofPattern("HH:mm"));
-    }
-    public TimeIndicator(LocalTime timeStart, LocalTime timeEnd, Duration timeSteps, DateTimeFormatter formatter) {
-        this(new SimpleObjectProperty<>(timeStart), new SimpleObjectProperty<>(timeEnd), new SimpleObjectProperty<>(timeSteps), formatter);
-    }
-    public TimeIndicator(ObjectProperty<LocalTime> timeStart, ObjectProperty<LocalTime> timeEnd,
-                         ObjectProperty<Duration> timeSteps, DateTimeFormatter formatter) {
-        this.timeStartProperty = timeStart;
-        this.timeEndProperty = timeEnd;
-        this.timeStepsProperty = timeSteps;
-        this.formatter = formatter;
-
-        timeStartProperty.addListener(observable -> calculateRows());
-        timeEndProperty.addListener(observable -> calculateRows());
-        timeStepsProperty.addListener(observable -> calculateRows());
-
-        calculateRows();
+    public TimeIndicator(DayPane dayPane) {
+        this(dayPane, new Indicator());
     }
 
+    public TimeIndicator(DayPane dayPane, Node indicator) {
+        AnchorPane.setLeftAnchor(dayPane, 0.0);
+        AnchorPane.setTopAnchor(dayPane, 0.0);
+        AnchorPane.setRightAnchor(dayPane, 0.0);
+        AnchorPane.setBottomAnchor(dayPane, 0.0);
+        this.getChildren().add(dayPane);
 
-    private void calculateRows() {
-        this.getChildren().clear();
-        this.getRowConstraints().clear();
+        this.startTime = dayPane.dayStartTimeProperty();
+        this.endTime = dayPane.dayEndTimeProperty();
+        this.date = dayPane.getDayDate();
 
-        for(LocalTime currentTime = timeStartProperty.get();
-            currentTime.isBefore(timeEndProperty.get()); ) {
+        this.indicator = indicator;
+        AnchorPane.setLeftAnchor(indicator, 0.0);
+        AnchorPane.setRightAnchor(indicator, 0.0);
+        this.getChildren().add(indicator);
 
-            RowConstraints row = new RowConstraints(0,0,Double.POSITIVE_INFINITY, Priority.SOMETIMES, VPos.TOP, true);
-            this.getRowConstraints().add(row);
+        // update position if the DayPane's time window changes
+        startTime.addListener(observable -> setIndicatorPosition(indicator));
+        endTime.addListener(observable -> setIndicatorPosition(indicator));
 
-            Label indicator = new Label();
-            indicator.setText(currentTime.format(formatter));
-            indicator.getStyleClass().add("time-indicator-label");
+        // updates the position every minute
+        Timeline indicatorupdate = new Timeline(new KeyFrame(javafx.util.Duration.minutes(1), actionEvent -> setIndicatorPosition(indicator)));
+        indicatorupdate.setCycleCount(Animation.INDEFINITE);
+        indicatorupdate.play();
 
-            this.add(indicator, 0, this.getRowConstraints().size() - 1);
+        // initial position
+        setIndicatorPosition(indicator);
+    }
 
-            // prevent overflows at midnight
-            LocalTime newTime = currentTime.plusMinutes(timeStepsProperty.get().toMinutes());
-            if(newTime.isAfter(currentTime)) {
-                currentTime = newTime;
-            } else {
-                break;
+
+    /**
+     * Sets the position of a given indicator according to the current time of
+     * the hosts machine. If the current time is not inside the time window of
+     * the DayPane the indicator will be removed from the stage. If it is inside
+     * the time window the indicator will be shown. It does not update the
+     * position when time passes by.
+     * @param indicator The indicator node that should be shown on the stage.
+     */
+    private void setIndicatorPosition(Node indicator) {
+        if (LocalTime.now().isBefore(startTime.get())
+                || LocalTime.now().isAfter(endTime.get())
+                || !LocalDate.now().isEqual(date)) {
+            this.getChildren().remove(indicator);
+        } else {
+            if (!this.getChildren().contains(indicator)) {
+                this.getChildren().add(indicator);
             }
+        }
+        int totalMinutes = (int) Duration.between(startTime.get(), endTime.get()).toMinutes();
+        int offsetMinutes = LocalTime.now().minusMinutes(startTime.get().toSecondOfDay() / 60).toSecondOfDay() / 60;
+
+        PercentPane.setTopAnchor(indicator, (double) offsetMinutes / totalMinutes);
+    }
+
+    private static class Indicator extends StackPane {
+        public Indicator() {
+            Circle c = new Circle(5);
+            Line l = new Line();
+            l.setStartX(0);
+            l.endXProperty().bind(this.widthProperty().subtract(10));
+            c.getStyleClass().add("timeindicator");
+            l.getStyleClass().add("timeindicator");
+
+            StackPane.setAlignment(c, Pos.CENTER_LEFT);
+            this.getChildren().add(l);
+            this.getChildren().add(c);
+            this.translateYProperty().bind(this.heightProperty().divide(2).negate());
         }
     }
 }

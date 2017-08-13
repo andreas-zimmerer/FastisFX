@@ -2,14 +2,13 @@ package com.jibbow.fastis;
 
 import com.jibbow.fastis.util.DayPane;
 import com.jibbow.fastis.util.PercentPane;
+import com.jibbow.fastis.util.TimeAxis;
 import com.jibbow.fastis.util.TimeIndicator;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.control.*;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -50,10 +49,10 @@ public class DayView extends GridPane {
         RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE,USE_COMPUTED_SIZE,Double.POSITIVE_INFINITY,Priority.ALWAYS,VPos.TOP,true);
         dayPaneHolder.getRowConstraints().add(rowConstraint);
 
-        TimeIndicator timeIndicator = new TimeIndicator(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
+        TimeAxis timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
 
-        dayPaneHolder.add(timeIndicator, 0, 0);
-        dayPaneHolder.add(dayPane,1,0);
+        dayPaneHolder.add(timeAxis, 0, 0);
+        dayPaneHolder.add(new TimeIndicator(dayPane),1,0);
         scrollPane.setContent(dayPaneHolder);
 
 
