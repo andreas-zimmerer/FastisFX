@@ -1,23 +1,30 @@
 package com.jibbow.fastis;
 
+import com.jibbow.fastis.rendering.DayViewRenderer;
 import com.jibbow.fastis.util.DayPane;
 import com.jibbow.fastis.util.TimeAxis;
 import com.jibbow.fastis.util.TimeIndicator;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jibbow on 8/12/17.
  */
 public class DayView extends CalendarView {
+
+    ObjectProperty<LocalDate> date;
 
     Node headerPane;
     Node allDayPane;
@@ -25,17 +32,36 @@ public class DayView extends CalendarView {
     TimeAxis timeAxis;
     TimeIndicator timeIndicator;
 
-    public DayView() {
+    public DayView(LocalDate date) {
+        this(new SimpleObjectProperty<>(date));
+    }
+    public DayView(ObjectProperty<LocalDate> date) {
+        this(date, new DayViewRenderer());
+    }
+    public DayView(ObjectProperty<LocalDate> date, DayViewRenderer renderer, Calendar... calendar) {
         this.getStylesheets().add(DayView.class.getClassLoader().getResource("css/DayView.css").toString());
         this.setPrefWidth(300);
         this.setPrefHeight(400);
 
-        this.headerPane = populateHeaderPane();
-        this.allDayPane = populateAllDayPane();
+        // set date and displayed calendars
+        this.date = date;
+        for(int i=0;i<calendar.length;i++) {
+            this.getCalendars().add(calendar[i]);
+        }
+
+        // get a list of appointments of all calendars for the current day
+        List<Appointment> allAppointments = calendars.stream()
+                .flatMap(cal -> cal.getAppointmentsFor(date.get()).stream())
+                .collect(Collectors.toList());
+
+        this.headerPane = renderer.createHeaderPane(this);
         this.dayPane = new DayPane(LocalDate.now());
         this.dayPane.getStyleClass().add("daypane");
         this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
         this.timeIndicator = new TimeIndicator(dayPane);
+        this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()
+                .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
+
 
         // set layout for this pane
         RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
@@ -68,23 +94,5 @@ public class DayView extends CalendarView {
         this.add(scrollPane, 0, 2);
         this.add(allDayPane, 0, 1);
         this.add(headerPane, 0, 0);
-    }
-
-
-    private Node populateAllDayPane() {
-        AnchorPane pane = new AnchorPane();
-        Label day = new Label("display all day appointments");
-        pane.getChildren().add(day);
-        pane.getStyleClass().add("alldaypane");
-        return pane;
-    }
-
-    private Node populateHeaderPane() {
-        AnchorPane p = new AnchorPane();
-        Label day = new Label("Mo");
-        p.getChildren().add(day);
-        p.getStyleClass().add("headerpane");
-        p.setMinHeight(50);
-        return p;
     }
 }
