@@ -38,6 +38,8 @@ public class DayPane extends PercentPane {
         this.dayEndTime = new SimpleObjectProperty<>(dayEndTime);
         this.renderer = renderer;
 
+        this.setPrefHeight(Duration.between(dayStartTime, dayEndTime).toMinutes() / 2);
+
         this.appointments = new HashMap<>();
 
         this.dayStartTime.addListener(observable -> {

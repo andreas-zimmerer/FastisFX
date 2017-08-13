@@ -32,24 +32,30 @@ public class DayView extends GridPane {
         this.dayPane.getStyleClass().add("daypane");
 
 
-
-        // responsible for time labels and horizontal rows
-        GridPane backgroundPane = new GridPane();
-        backgroundPane.setGridLinesVisible(true);
-        backgroundPane.addRow(0);
-        backgroundPane.addRow(1);
-        backgroundPane.addRow(2);
-
-        ScrollPane scrollPane = new ScrollPane(dayPane);
+        ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToHeight(false);
+        scrollPane.setHmin(USE_COMPUTED_SIZE);
+        scrollPane.setHvalue(USE_COMPUTED_SIZE);
         scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
+
+        // holds column for time labels on the left side and the DayPane on the right side
+        GridPane dayPaneHolder = new GridPane();
+        ColumnConstraints timeColumn = new ColumnConstraints(40,40,40);
+        ColumnConstraints appointmentscolumn = new ColumnConstraints(100,100,Double.POSITIVE_INFINITY,Priority.ALWAYS,HPos.CENTER,true);
+        dayPaneHolder.getColumnConstraints().addAll(timeColumn, appointmentscolumn);
+        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE,USE_COMPUTED_SIZE,Double.POSITIVE_INFINITY,Priority.ALWAYS,VPos.TOP,true);
+        dayPaneHolder.getRowConstraints().add(rowConstraint);
+
+
+        dayPaneHolder.add(dayPane,1,0);
+        scrollPane.setContent(dayPaneHolder);
+
 
         RowConstraints headerRow = new RowConstraints(50, 50, 50);
         RowConstraints allDayRow = new RowConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, VPos.TOP, false);
         RowConstraints dayPaneRow = new RowConstraints(150, 500, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true);
         this.getRowConstraints().addAll(headerRow, allDayRow, dayPaneRow);
-
         ColumnConstraints columnConstraints = new ColumnConstraints(100, 200, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true);
         this.getColumnConstraints().add(columnConstraints);
 
