@@ -1,6 +1,7 @@
 package demo;
 
 import com.jibbow.fastis.Appointment;
+import com.jibbow.fastis.Calendar;
 import com.jibbow.fastis.DayView;
 import com.jibbow.fastis.WeekView;
 import com.jibbow.fastis.rendering.DayViewRenderer;
@@ -23,14 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        WeekView root1 =  new WeekView(LocalDate.now());
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root1));
-        stage.setTitle("Fastis");
-        stage.setMinWidth(100);
-        stage.setMinHeight(100);
-        stage.show();
-
+        Calendar cal = new Calendar();
         Appointment app = new Appointment(new TimeInterval(LocalDateTime.now().withHour(12).minusDays(1), LocalDateTime.now().withHour(14).minusDays(1)),"Meeting");
         //root1.dayPane.addAppointment(app);
         app.intervalProperty().set(new TimeInterval(LocalDateTime.now().withHour(12), LocalDateTime.now().withHour(14)));
@@ -41,6 +35,18 @@ public class Main extends Application {
         //root1.dayPane.addAppointment(app3);
         //Appointment appfullday = new Appointment(true, LocalDate.now());
         //root1.dayPane.addAppointment(appfullday);
+        cal.addAll(app, app3);
+
+
+        DayView root1 =  new DayView(LocalDate.now(), cal);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root1));
+        stage.setTitle("Fastis");
+        stage.setMinWidth(100);
+        stage.setMinHeight(100);
+        stage.show();
+
+
     }
 }
 

@@ -29,12 +29,12 @@ public class DayView extends CalendarView {
     TimeAxis timeAxis;
     TimeIndicator timeIndicator;
 
-    public DayView(LocalDate date) {
-        this(new SimpleObjectProperty<>(date));
+    public DayView(LocalDate date, Calendar... calendar) {
+        this(new SimpleObjectProperty<>(date), calendar);
     }
 
-    public DayView(ObjectProperty<LocalDate> date) {
-        this(date, new DayViewRenderer());
+    public DayView(ObjectProperty<LocalDate> date, Calendar... calendar) {
+        this(date, new DayViewRenderer(), calendar);
     }
 
     public DayView(ObjectProperty<LocalDate> date, DayViewRenderer renderer, Calendar... calendar) {
@@ -53,12 +53,16 @@ public class DayView extends CalendarView {
                 .flatMap(cal -> cal.getAppointmentsFor(date.get()).stream())
                 .collect(Collectors.toList());
 
+
         this.headerPane = renderer.createHeaderPane(this);
         this.dayPane = new DayPane(LocalDate.now());
         this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
         this.timeIndicator = new TimeIndicator(dayPane);
         this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()
                 .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
+
+        // populate DayPane
+        allAppointments.forEach(appointment -> dayPane.addAppointment(appointment));
 
         setLayout();
     }
