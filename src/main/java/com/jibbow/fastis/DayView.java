@@ -28,6 +28,7 @@ public class DayView extends CalendarView {
     DayPane dayPane;
     TimeAxis timeAxis;
     TimeIndicator timeIndicator;
+    DayViewRenderer renderer;
 
     public DayView(LocalDate date, Calendar... calendar) {
         this(new SimpleObjectProperty<>(date), calendar);
@@ -48,28 +49,8 @@ public class DayView extends CalendarView {
             this.getCalendars().add(calendar[i]);
         }
 
-        // get a list of appointments of all calendars for the current day
-        List<Appointment> allAppointments = calendars.stream()
-                .flatMap(cal -> cal.getAppointmentsFor(date.get()).stream())
-                .collect(Collectors.toList());
+        this.renderer = renderer;
 
-
-        this.headerPane = renderer.createHeaderPane(this);
-        this.dayPane = new DayPane(LocalDate.now());
-        this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
-        this.timeIndicator = new TimeIndicator(dayPane);
-        this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()
-                .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
-
-        // populate DayPane
-        allAppointments.forEach(a -> dayPane.addAppointment(a));
-
-
-        setLayout();
-    }
-
-
-    private void setLayout() {
         // set layout for this pane
         RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
         RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
@@ -77,6 +58,31 @@ public class DayView extends CalendarView {
         ColumnConstraints columnConstraints = new ColumnConstraints(100, 200, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true);
         this.getRowConstraints().addAll(headerRow, allDayRow, dayPaneRow);
         this.getColumnConstraints().add(columnConstraints);
+
+
+        getDate().addListener(observable -> {
+            this.getChildren().clear();
+            setContent();
+        });
+
+        setContent();
+    }
+
+
+    private void setContent() {
+        // get a list of appointments of all calendars for the current day
+        List<Appointment> allAppointments = calendars.stream()
+                .flatMap(cal -> cal.getAppointmentsFor(dateProperty.get()).stream())
+                .collect(Collectors.toList());
+
+        this.headerPane = renderer.createHeaderPane(this);
+        this.dayPane = new DayPane(LocalDate.now());
+        this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
+        this.timeIndicator = new TimeIndicator(dayPane);
+        this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()
+                .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
+        // populate DayPane
+        allAppointments.forEach(a -> dayPane.addAppointment(a));
 
 
         // ScrollPane that contains the DayPane and the TimeAxis

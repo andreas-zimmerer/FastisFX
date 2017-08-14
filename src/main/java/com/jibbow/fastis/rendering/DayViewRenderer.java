@@ -4,6 +4,7 @@ import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.DayView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -34,8 +35,14 @@ public class DayViewRenderer extends DayPaneRenderer {
         Label lblDate = new Label(calView.getDate().get().toString());
         lblDate.getStyleClass().add("label-date");
 
+        Button left = new Button("<");
+        left.setOnAction(event -> calView.getDate().set(calView.getDate().get().minusDays(1)));
+        Button right = new Button(">");
+        right.setOnAction(event -> calView.getDate().set(calView.getDate().get().plusDays(1)));
+
         container.getChildren().add(lblWeekday);
         container.getChildren().add(lblDate);
+        container.getChildren().addAll(left, right);
         return container;
     }
 }
