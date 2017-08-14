@@ -41,6 +41,7 @@ public class WeekView extends CalendarView {
     WeekViewRenderer renderer = new WeekViewRenderer();
 
     public WeekView(LocalDate dateBegin) {
+        this.getStylesheets().add(WeekView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = new SimpleObjectProperty<>(dateBegin);
 
         this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(30));
@@ -92,9 +93,6 @@ public class WeekView extends CalendarView {
 
             dayPaneHolder.add(new DayPane(dateProperty.get()), i+1, 0);
         }
-
-        dayPaneHolder.setGridLinesVisible(true);
-        allDayPane.setGridLinesVisible(true);
 
         dayPaneHolder.add(timeAxis, 0, 0);
         //dayPaneHolder.add(timeIndicator, 1, 0);

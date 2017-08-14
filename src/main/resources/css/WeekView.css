@@ -1,0 +1,51 @@
+.root {
+
+}
+
+.appointment {
+    -fx-background-color: #ffab91;
+    -fx-background-radius: 3.0;
+    -fx-border-radius: 3.0;
+    -fx-padding: 0 3 0 3;
+    -fx-background-insets: 0 3 0 3;
+}
+
+.appointment .leftbar {
+    -fx-background-color: #ff7043;
+    -fx-background-radius: 3 0 0 3;
+}
+
+.appointment .lblStartTime {
+    -fx-font-size: 10;
+    -fx-text-fill: #bf360c;
+}
+
+.headerpane {
+    -fx-background-color: white;
+}
+
+.alldaypane {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
+}
+
+.time-indicator-label {
+    -fx-font-size: 10;
+    -fx-text-fill: darkgray;
+    -fx-translate-y: -5;
+    -fx-padding: 0 15 0 4;
+}
+
+.timeindicator {
+    -fx-fill: blue;
+    -fx-stroke: blue;
+}
+
+.label-weekday {
+    -fx-font-size: 22;
+    -fx-padding: 5 10 10 4;
+}
+
+.label-date {
+    -fx-padding: 5 0 11 0;
+}
