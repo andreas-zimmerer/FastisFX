@@ -2,7 +2,6 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.CalendarView;
-import com.jibbow.fastis.DayView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -18,7 +17,7 @@ public class DayViewRenderer extends DayPaneRenderer {
 
     public Node createAllDayPane(List<Appointment> appointments) {
         AnchorPane pane = new AnchorPane();
-        Label day = new Label("display all day appointments");
+        Label day = new Label("all day");
         pane.getChildren().add(day);
         pane.getStyleClass().add("alldaypane");
         return pane;

@@ -24,7 +24,7 @@
     -fx-background-color: white;
 }
 
-.alldaypane {
+.all-day-pane-background {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
 }

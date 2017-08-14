@@ -1,19 +1,13 @@
 package com.jibbow.fastis;
 
-import com.jibbow.fastis.rendering.DayViewRenderer;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
 import com.jibbow.fastis.util.DayPane;
 import com.jibbow.fastis.util.TimeAxis;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -54,34 +48,35 @@ public class WeekView extends CalendarView {
 
     private void setLayout() {
         // set layout for this pane
-        RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
-        RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE);
-        RowConstraints dayPaneRow = new RowConstraints(150, 500, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true);
-        ColumnConstraints columnConstraints = new ColumnConstraints(400, 600, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true);
+        RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // HEADER
+        RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // ALLDAY
+        RowConstraints dayPaneRow = new RowConstraints(150, 500, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // CALENDAR
+        ColumnConstraints columnConstraints = new ColumnConstraints(400, 600, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true); // FULL
         this.getRowConstraints().addAll(headerRow, allDayRow, dayPaneRow);
         this.getColumnConstraints().add(columnConstraints);
 
         // ScrollPane that contains the DayPane and the TimeAxis
         ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
         scrollPane.setFitToWidth(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
 
         // holds a column for the TimeAxis on the left side and the DayPanes on the right side
-        // also add the same columns for the allDayPane
         GridPane dayPaneHolder = new GridPane();
         GridPane allDayPane = new GridPane();
-        ColumnConstraints timeColumn = new ColumnConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false);
-        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true);
+        ColumnConstraints timeColumn = new ColumnConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false); // TIME COLUMN
+        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // FULL
         dayPaneHolder.getRowConstraints().add(rowConstraint);
         dayPaneHolder.getColumnConstraints().add(timeColumn);
 
-        ColumnConstraints timeColumnAllDay = new ColumnConstraints();
+        // set layout for allDayPane
+        allDayPane.getStyleClass().add("all-day-pane-background");
+        ColumnConstraints timeColumnAllDay = new ColumnConstraints(); // additional space on the left side aligning it with the time axis
         timeColumnAllDay.minWidthProperty().bind(timeAxis.widthProperty());
-        timeColumnAllDay.setHgrow(Priority.NEVER);
         allDayPane.getColumnConstraints().add(timeColumnAllDay);
         allDayPane.setPadding(new Insets(0,17,0, 1)); // has to be there because the scrollpane takes away some space
 
+        // create a new column for every day and add a DayPane as well as a AllDayPane to it
         for(int i=0;i<numberOfDays;i++) {
             ColumnConstraints appointmentsColumn = new ColumnConstraints(50, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
             dayPaneHolder.getColumnConstraints().add(appointmentsColumn);
