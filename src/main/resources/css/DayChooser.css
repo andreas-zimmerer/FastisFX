@@ -3,6 +3,7 @@
     -fx-alignment: center;
     -fx-min-height: 24;
     -fx-min-width: 24;
+    -fx-text-fill: black;
 }
 
 .daychooser-day:hover {
