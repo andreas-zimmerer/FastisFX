@@ -6,8 +6,6 @@ import com.jibbow.fastis.components.TimeAxis;
 import com.jibbow.fastis.components.TimeIndicator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -84,6 +82,7 @@ public class DayView extends CalendarView {
         // ScrollPane that contains the DayPane and the TimeAxis
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
 
         // holds a column for the TimeAxis on the left side and the DayPane on the right side

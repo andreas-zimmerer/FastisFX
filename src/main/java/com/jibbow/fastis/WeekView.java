@@ -62,6 +62,7 @@ public class WeekView extends CalendarView {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
         scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         // holds a column for the TimeAxis on the left side and the DayPanes on the right side
