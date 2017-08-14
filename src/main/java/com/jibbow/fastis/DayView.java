@@ -61,7 +61,6 @@ public class DayView extends CalendarView {
 
 
         getDate().addListener(observable -> {
-            this.getChildren().clear();
             setContent();
         });
 
@@ -70,6 +69,8 @@ public class DayView extends CalendarView {
 
 
     private void setContent() {
+        this.getChildren().clear();
+
         // get a list of appointments of all calendars for the current day
         List<Appointment> allAppointments = calendars.stream()
                 .flatMap(cal -> cal.getAppointmentsFor(dateProperty.get()).stream())

@@ -49,3 +49,14 @@
 .label-date {
     -fx-padding: 5 0 11 0;
 }
+
+.day-header-button {
+    -fx-background-color: white;
+    -fx-padding: 2 5 2 5;
+    -fx-background-insets: 2 1 0 0;
+    -fx-font-size: 20;
+    -fx-effect: dropshadow(three-pass-box, gray, 2, 0.0, 0, 0);
+}
+.day-header-button:hover {
+    -fx-effect: dropshadow(three-pass-box, gray, 5, 0.0, 0, 0);
+}
