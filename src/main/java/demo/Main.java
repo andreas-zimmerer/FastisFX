@@ -2,6 +2,7 @@ package demo;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.DayView;
+import com.jibbow.fastis.WeekView;
 import com.jibbow.fastis.rendering.DayViewRenderer;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.application.Application;
@@ -22,7 +23,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        DayView root1 =  new DayView(LocalDate.now());
+        WeekView root1 =  new WeekView(LocalDate.now());
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");

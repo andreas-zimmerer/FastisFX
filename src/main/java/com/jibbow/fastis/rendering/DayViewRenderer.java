@@ -1,6 +1,7 @@
 package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
+import com.jibbow.fastis.CalendarView;
 import com.jibbow.fastis.DayView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -23,15 +24,15 @@ public class DayViewRenderer extends DayPaneRenderer {
         return pane;
     }
 
-    public Node createHeaderPane(DayView dayView) {
+    public Node createHeaderPane(CalendarView calView) {
         HBox container = new HBox();
         container.setAlignment(Pos.BOTTOM_LEFT);
         container.getStyleClass().add("headerpane");
 
-        Label lblWeekday = new Label(dayView.getDate().get().format(DateTimeFormatter.ofPattern("EEE")));
+        Label lblWeekday = new Label(calView.getDate().get().format(DateTimeFormatter.ofPattern("EEE")));
         lblWeekday.getStyleClass().add("label-weekday");
 
-        Label lblDate = new Label(dayView.getDate().get().toString());
+        Label lblDate = new Label(calView.getDate().get().toString());
         lblDate.getStyleClass().add("label-date");
 
         container.getChildren().add(lblWeekday);

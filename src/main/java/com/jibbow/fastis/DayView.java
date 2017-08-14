@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
  */
 public class DayView extends CalendarView {
 
-    ObjectProperty<LocalDate> date;
-
     Node headerPane;
     Node allDayPane;
     DayPane dayPane;
@@ -45,7 +43,7 @@ public class DayView extends CalendarView {
         this.setPrefHeight(400);
 
         // set date and displayed calendars
-        this.date = date;
+        this.dateProperty = date;
         for (int i = 0; i < calendar.length; i++) {
             this.getCalendars().add(calendar[i]);
         }
@@ -83,7 +81,7 @@ public class DayView extends CalendarView {
 
         // holds a column for the TimeAxis on the left side and the DayPane on the right side
         GridPane dayPaneHolder = new GridPane();
-        ColumnConstraints timeColumn = new ColumnConstraints(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false);
+        ColumnConstraints timeColumn = new ColumnConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false);
         ColumnConstraints appointmentsColumn = new ColumnConstraints(100, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
         RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true);
         dayPaneHolder.getColumnConstraints().addAll(timeColumn, appointmentsColumn);
@@ -98,9 +96,5 @@ public class DayView extends CalendarView {
         this.add(scrollPane, 0, 2);
         this.add(allDayPane, 0, 1);
         this.add(headerPane, 0, 0);
-    }
-
-    public ObjectProperty<LocalDate> getDate() {
-        return date;
     }
 }
