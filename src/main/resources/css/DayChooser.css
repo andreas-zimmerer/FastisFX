@@ -33,3 +33,7 @@
 .daychooser-monthgrid {
 
 }
+
+.daychooser-label-month {
+    -fx-text-fill: black;
+}
