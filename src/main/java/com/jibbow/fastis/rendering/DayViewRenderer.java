@@ -1,7 +1,7 @@
 package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
-import com.jibbow.fastis.CalendarView;
+import com.jibbow.fastis.DayView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -23,7 +23,7 @@ public class DayViewRenderer extends DayPaneRenderer {
         return pane;
     }
 
-    public Node createHeaderPane(CalendarView calView) {
+    public Node createHeaderPane(DayView calView) {
         HBox container = new HBox();
         container.setAlignment(Pos.BOTTOM_LEFT);
         container.getStyleClass().add("headerpane");

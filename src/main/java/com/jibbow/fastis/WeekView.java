@@ -84,13 +84,15 @@ public class WeekView extends CalendarView {
 
         // create a new column for every day and add a DayPane as well as a AllDayPane to it
         for(int i=0;i<numberOfDays;i++) {
+            LocalDate currentDate = dateProperty.get().plusDays(i);
+
             // create a new column
             ColumnConstraints appointmentsColumn = new ColumnConstraints(50, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
             dayPaneHolder.getColumnConstraints().add(appointmentsColumn);
             singleDayHeader.getColumnConstraints().add(appointmentsColumn);
 
             // populate header pane for each day
-            Node dayHeader = renderer.createSingleDayHeader(dateProperty.get());
+            Node dayHeader = renderer.createSingleDayHeader(currentDate);
             singleDayHeader.add(dayHeader, i+1, 0);
             dayHeaderPanes.add(dayHeader);
 
@@ -100,7 +102,7 @@ public class WeekView extends CalendarView {
             allDayAppointmentsPanes.add(allDay);
 
             // create a new DayPane for each day
-            DayPane dp = new DayPane(dateProperty.get());
+            DayPane dp = new DayPane(currentDate);
             dayPaneHolder.add(dp, i+1, 0);
             dayPanes.add(dp);
         }
@@ -115,5 +117,13 @@ public class WeekView extends CalendarView {
         this.add(scrollPane, 0, 2);
         this.add(singleDayHeader, 0, 1);
         this.add(weekHeaderPane, 0, 0);
+    }
+
+    public LocalDate getStartDate() {
+        return dateProperty.get();
+    }
+
+    public LocalDate getEndDate() {
+        return dateProperty.get().plusDays(numberOfDays - 1);
     }
 }
