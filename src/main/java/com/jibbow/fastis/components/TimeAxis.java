@@ -1,4 +1,4 @@
-package com.jibbow.fastis.util;
+package com.jibbow.fastis.components;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

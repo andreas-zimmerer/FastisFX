@@ -1,11 +1,13 @@
 package com.jibbow.fastis;
 
 import com.jibbow.fastis.rendering.DayViewRenderer;
-import com.jibbow.fastis.util.DayPane;
-import com.jibbow.fastis.util.TimeAxis;
-import com.jibbow.fastis.util.TimeIndicator;
+import com.jibbow.fastis.components.DayPane;
+import com.jibbow.fastis.components.TimeAxis;
+import com.jibbow.fastis.components.TimeIndicator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -62,7 +64,8 @@ public class DayView extends CalendarView {
                 .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
 
         // populate DayPane
-        allAppointments.forEach(appointment -> dayPane.addAppointment(appointment));
+        allAppointments.forEach(a -> dayPane.addAppointment(a));
+
 
         setLayout();
     }

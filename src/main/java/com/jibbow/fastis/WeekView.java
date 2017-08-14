@@ -1,8 +1,8 @@
 package com.jibbow.fastis;
 
 import com.jibbow.fastis.rendering.WeekViewRenderer;
-import com.jibbow.fastis.util.DayPane;
-import com.jibbow.fastis.util.TimeAxis;
+import com.jibbow.fastis.components.DayPane;
+import com.jibbow.fastis.components.TimeAxis;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;

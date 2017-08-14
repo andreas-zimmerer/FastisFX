@@ -1,7 +1,9 @@
-package com.jibbow.fastis.util;
+package com.jibbow.fastis.components;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.rendering.DayPaneRenderer;
+import com.jibbow.fastis.util.PercentPane;
+import com.jibbow.fastis.util.TimeInterval;
 import javafx.beans.property.*;
 import javafx.scene.layout.Region;
 
@@ -68,6 +70,15 @@ public class DayPane extends PercentPane {
             appointments.put(appointment, addGuiElement(appointment));
             renderer.layoutAppointments(appointments);
         });
+    }
+
+
+    public void removeAppointment(Appointment appointment) {
+        Region region = appointments.get(appointment);
+        if(region != null) {
+            this.getChildren().remove(region);
+        }
+        appointments.remove(appointment);
     }
 
 

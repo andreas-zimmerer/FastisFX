@@ -1,5 +1,6 @@
-package com.jibbow.fastis.util;
+package com.jibbow.fastis.components;
 
+import com.jibbow.fastis.util.PercentPane;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
