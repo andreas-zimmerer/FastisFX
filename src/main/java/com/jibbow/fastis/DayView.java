@@ -76,7 +76,7 @@ public class DayView extends CalendarView {
                 .collect(Collectors.toList());
 
         this.headerPane = renderer.createHeaderPane(this);
-        this.dayPane = new DayPane(LocalDate.now());
+        this.dayPane = new DayPane(dateProperty.get());
         this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(60));
         this.timeIndicator = new TimeIndicator(dayPane);
         this.allDayPane = renderer.createAllDayPane(allAppointments.parallelStream()

@@ -44,7 +44,6 @@ public class TimeIndicator extends PercentPane {
         this.indicator = indicator;
         AnchorPane.setLeftAnchor(indicator, 0.0);
         AnchorPane.setRightAnchor(indicator, 0.0);
-        this.getChildren().add(indicator);
 
         // update position if the DayPane's time window changes
         startTime.addListener(observable -> setIndicatorPosition(indicator));
