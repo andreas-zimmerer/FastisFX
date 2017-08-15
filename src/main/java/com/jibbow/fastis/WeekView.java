@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jibbow on 8/12/17.
@@ -114,6 +115,10 @@ public class WeekView extends CalendarView {
         for(int i=0;i<numberOfDays;i++) {
             final LocalDate currentDate = dateProperty.get().plusDays(i);
 
+            List<Appointment> allAppointments = calendars.stream()
+                    .flatMap(cal -> cal.getAppointmentsFor(dateProperty.get()).stream())
+                    .collect(Collectors.toList());
+
             // create a new column
             final ColumnConstraints appointmentsColumn = new ColumnConstraints(
                     50, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
@@ -126,7 +131,8 @@ public class WeekView extends CalendarView {
             dayHeaderPanes.add(dayHeader);
 
             // populate pane for all-day appointments
-            final Node allDay = renderer.createAllDayPane(new LinkedList<>());
+            final Node allDay = renderer.createAllDayPane(allAppointments.parallelStream()
+                    .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
             singleDayHeader.add(allDay, i+1, 1);
             allDayAppointmentsPanes.add(allDay);
 
@@ -138,6 +144,8 @@ public class WeekView extends CalendarView {
             // create a new DayPane for each day
             final DayPane dp = new DayPane(currentDate);
             dayPaneHolder.add(dp, i+1, 0);
+            // populate DayPane
+            allAppointments.forEach(a -> dp.addAppointment(a));
 
 
             dayPanes.add(dp);

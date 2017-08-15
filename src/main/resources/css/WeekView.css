@@ -51,3 +51,21 @@
     -fx-padding: 5 0 11 0;
     -fx-text-fill: darkgray;
 }
+
+
+.day-chooser .context-menu {
+    -fx-background-color: white;
+}
+
+.day-chooser .context-menu:focused {
+    -fx-background-color: white;
+}
+
+.day-chooser .custom-menu-item {
+    -fx-background-color: white;
+    -fx-padding: 0;
+}
+
+.day-chooser .custom-menu-item:focused {
+    -fx-background-color: white;
+}
