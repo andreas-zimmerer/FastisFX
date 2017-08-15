@@ -24,9 +24,14 @@
     -fx-background-color: white;
 }
 
-.all-day-pane-background {
+.weekview-day-header-container {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
+    -fx-grid-lines-visible: true;
+}
+
+.weekview-daypane-container {
+    -fx-grid-lines-visible: true;
 }
 
 .time-indicator-label {

@@ -71,8 +71,9 @@ public class WeekViewRenderer extends DayPaneRenderer {
 
     public Node createDayBackground(LocalDate date) {
         Pane p = new Pane();
-        if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY))
-            p.setStyle("-fx-background-color: red");
+        if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+                || date.getDayOfWeek().equals(DayOfWeek.SATURDAY))
+            p.setStyle("-fx-background-color: lightgoldenrodyellow");
         return p;
     }
 
