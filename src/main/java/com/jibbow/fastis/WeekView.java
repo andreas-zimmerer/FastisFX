@@ -3,6 +3,7 @@ package com.jibbow.fastis;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
 import com.jibbow.fastis.components.DayPane;
 import com.jibbow.fastis.components.TimeAxis;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -32,79 +33,113 @@ public class WeekView extends CalendarView {
     List<Node> allDayAppointmentsPanes;
     List<DayPane> dayPanes;
     TimeAxis timeAxis;
+    WeekViewRenderer renderer;
 
-    WeekViewRenderer renderer = new WeekViewRenderer();
 
-    public WeekView(LocalDate dateBegin) {
+    public WeekView(LocalDate dateBegin, Calendar... calendar) {
+        this(new SimpleObjectProperty<>(dateBegin), calendar);
+    }
+    public WeekView(ObjectProperty<LocalDate> dateBegin, Calendar... calendar) {
+        this(dateBegin, 7, calendar);
+    }
+    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
+        this(dateBegin, numberOfDays, new WeekViewRenderer(), calendar);
+    }
+    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, WeekViewRenderer renderer, Calendar... calendar) {
         this.getStylesheets().add(WeekView.class.getClassLoader().getResource("css/WeekView.css").toString());
-        this.dateProperty = new SimpleObjectProperty<>(dateBegin);
-
-        this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofMinutes(30));
-        this.allDayAppointmentsPanes = new ArrayList<>(numberOfDays);
-        this.weekHeaderPane = renderer.createHeaderPane(this);
+        this.dateProperty = dateBegin;
+        this.numberOfDays = numberOfDays;
+        this.renderer = renderer;
+        for (int i = 0; i < calendar.length; i++) {
+            this.getCalendars().add(calendar[i]);
+        }
         this.dayHeaderPanes = new ArrayList<>(numberOfDays);
         this.dayPanes = new ArrayList<>(numberOfDays);
+        this.allDayAppointmentsPanes = new ArrayList<>(numberOfDays);
 
-        setLayout();
-    }
-
-
-    private void setLayout() {
         // set layout for this pane
-        RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // HEADER
-        RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR ALL DAY APPOINTMENTS
-        RowConstraints dayPaneRow = new RowConstraints(150, 500, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // CALENDAR
-        ColumnConstraints columnConstraints = new ColumnConstraints(400, 600, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true); // FULL
+        final RowConstraints headerRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // HEADER
+        final RowConstraints allDayRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR ALL DAY APPOINTMENTS
+        final RowConstraints dayPaneRow = new RowConstraints(
+                150, 500, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // CALENDAR
+        final ColumnConstraints columnConstraints = new ColumnConstraints(
+                400, 600, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true); // FULL
         this.getRowConstraints().addAll(headerRow, allDayRow, dayPaneRow);
         this.getColumnConstraints().add(columnConstraints);
 
+        getDate().addListener(observable -> {
+            setContent();
+        });
+
+        setContent();
+    }
+
+
+    private void setContent() {
+        this.getChildren().clear();
+
+        this.timeAxis = new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofHours(1));
+        this.weekHeaderPane = renderer.createHeaderPane(this);
+
+
+
         // ScrollPane that contains the DayPane and the TimeAxis
-        ScrollPane scrollPane = new ScrollPane();
+        final ScrollPane scrollPane = new ScrollPane();
         scrollPane.setStyle("-fx-background-color:transparent;"); // remove gray border
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         // holds a column for the TimeAxis on the left side and the DayPanes on the right side
-        GridPane dayPaneHolder = new GridPane();
-        ColumnConstraints timeColumn = new ColumnConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false); // TIME COLUMN
-        RowConstraints rowConstraint = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // FULL
+        final GridPane dayPaneHolder = new GridPane();
+        final ColumnConstraints timeColumn = new ColumnConstraints(
+                USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE, Priority.ALWAYS, HPos.LEFT, false); // TIME COLUMN
+        final RowConstraints rowConstraint = new RowConstraints(
+                USE_PREF_SIZE, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.TOP, true); // FULL
         dayPaneHolder.getRowConstraints().add(rowConstraint);
         dayPaneHolder.getColumnConstraints().add(timeColumn);
 
         // set layout for singleDayHeader
-        GridPane singleDayHeader = new GridPane();
-        RowConstraints singleDayHeaderRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR A DAILY HEADER
-        RowConstraints singleDayAppointmentsRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR ALL DAY APPOINTMENTS
+        final GridPane singleDayHeader = new GridPane();
+        final RowConstraints singleDayHeaderRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR A DAILY HEADER
+        final RowConstraints singleDayAppointmentsRow = new RowConstraints(USE_PREF_SIZE, USE_COMPUTED_SIZE, USE_PREF_SIZE); // PANE FOR ALL DAY APPOINTMENTS
         singleDayHeader.getRowConstraints().addAll(singleDayHeaderRow, singleDayAppointmentsRow);
         singleDayHeader.getStyleClass().add("all-day-pane-background");
-        ColumnConstraints timeColumnAllDay = new ColumnConstraints(); // additional space on the left side aligning it with the time axis
+        final ColumnConstraints timeColumnAllDay = new ColumnConstraints(); // additional space on the left side aligning it with the time axis
         timeColumnAllDay.minWidthProperty().bind(timeAxis.widthProperty());
         singleDayHeader.getColumnConstraints().add(timeColumnAllDay);
         singleDayHeader.setPadding(new Insets(0,17,0, 1)); // has to be there because the scrollpane takes away some space
 
         // create a new column for every day and add a DayPane as well as a AllDayPane to it
         for(int i=0;i<numberOfDays;i++) {
-            LocalDate currentDate = dateProperty.get().plusDays(i);
+            final LocalDate currentDate = dateProperty.get().plusDays(i);
 
             // create a new column
-            ColumnConstraints appointmentsColumn = new ColumnConstraints(50, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
+            final ColumnConstraints appointmentsColumn = new ColumnConstraints(
+                    50, 100, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true);
             dayPaneHolder.getColumnConstraints().add(appointmentsColumn);
             singleDayHeader.getColumnConstraints().add(appointmentsColumn);
 
             // populate header pane for each day
-            Node dayHeader = renderer.createSingleDayHeader(currentDate);
+            final Node dayHeader = renderer.createSingleDayHeader(currentDate);
             singleDayHeader.add(dayHeader, i+1, 0);
             dayHeaderPanes.add(dayHeader);
 
             // populate pane for all-day appointments
-            Node allDay = renderer.createAllDayPane(new LinkedList<>());
+            final Node allDay = renderer.createAllDayPane(new LinkedList<>());
             singleDayHeader.add(allDay, i+1, 1);
             allDayAppointmentsPanes.add(allDay);
 
+
+            // create a background for each day
+            final Node dayBackground = renderer.createDayBackground(currentDate);
+            dayPaneHolder.add(dayBackground, i+1, 0);
+
             // create a new DayPane for each day
-            DayPane dp = new DayPane(currentDate);
+            final DayPane dp = new DayPane(currentDate);
             dayPaneHolder.add(dp, i+1, 0);
+
+
             dayPanes.add(dp);
         }
 

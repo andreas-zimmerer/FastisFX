@@ -7,7 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -40,6 +42,13 @@ public class WeekViewRenderer extends DayPaneRenderer {
         container.getChildren().add(lblWeekday);
         container.getChildren().add(lblDate);
         return container;
+    }
+
+    public Node createDayBackground(LocalDate date) {
+        Pane p = new Pane();
+        if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+            p.setStyle("-fx-background-color: red");
+        return p;
     }
 
     public Node createSingleDayHeader(LocalDate date) {

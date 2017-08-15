@@ -38,7 +38,7 @@ public class Main extends Application {
         cal.addAll(app, app3);
 
 
-        DayView root1 =  new DayView(LocalDate.now(), cal);
+        WeekView root1 =  new WeekView(LocalDate.now(), cal);
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");
