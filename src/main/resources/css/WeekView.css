@@ -15,7 +15,7 @@
 }
 
 .weekview-timeaxis-container {
-
+    -fx-background-color: white;
 }
 
 .weekview-day-header-container {
@@ -31,6 +31,13 @@
 .day-background {
     -fx-border-color: lightgray;
     -fx-border-width: 0 0 0 0.5;
+    -fx-background-color: white;
+}
+.day-background-today {
+
+}
+.day-background-weekend {
+    -fx-background-color: #FFFFEF;
 }
 
 .time-indicator-label {
@@ -41,8 +48,8 @@
 }
 
 .timeindicator {
-    -fx-fill: blue;
-    -fx-stroke: blue;
+    -fx-fill: dodgerblue;
+    -fx-stroke: dodgerblue;
 }
 
 
@@ -101,6 +108,12 @@
 }
 
 .header-container {
-    -fx-border-color: lightgray;
-    -fx-border-width: 0 0 0 0.5;
+    -fx-border-width: 0 0 2.5 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0 0 5 0;
+    -fx-border-insets: 0 0 8 0;
+}
+
+.header-container-today {
+    -fx-border-color: indianred;
 }

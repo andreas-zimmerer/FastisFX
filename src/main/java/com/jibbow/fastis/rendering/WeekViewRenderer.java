@@ -29,9 +29,6 @@ import java.util.Locale;
 public class WeekViewRenderer extends DayPaneRenderer {
     public Node createAllDayPane(List<Appointment> appointments) {
         AnchorPane pane = new AnchorPane();
-        Label day = new Label("all day");
-        pane.getChildren().add(day);
-        pane.getStyleClass().add("alldaypane");
         return pane;
     }
 
@@ -76,8 +73,12 @@ public class WeekViewRenderer extends DayPaneRenderer {
     public Node createDayBackground(LocalDate date) {
         Pane p = new Pane();
         if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY)
-                || date.getDayOfWeek().equals(DayOfWeek.SATURDAY))
-            p.setStyle("-fx-background-color: lightgoldenrodyellow");
+                || date.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+            p.getStyleClass().add("day-background-weekend");
+        }
+        if(date.equals(LocalDate.now())) {
+            p.getStyleClass().add("day-background-today");
+        }
         p.getStyleClass().add("day-background");
         return p;
     }
@@ -89,6 +90,9 @@ public class WeekViewRenderer extends DayPaneRenderer {
         lblDate.getStyleClass().add("header-date");
         VBox container = new VBox(lblWeekday, lblDate);
         container.getStyleClass().add("header-container");
+        if(date.equals(LocalDate.now())) {
+            container.getStyleClass().add("header-container-today");
+        }
         container.setAlignment(Pos.TOP_CENTER);
         return container;
     }
