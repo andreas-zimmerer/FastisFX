@@ -37,3 +37,7 @@
 .daychooser-label-month {
     -fx-text-fill: black;
 }
+
+.daychooser-current-day {
+    -fx-text-fill: orange;
+}

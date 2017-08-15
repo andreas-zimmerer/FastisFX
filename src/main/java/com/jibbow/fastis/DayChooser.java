@@ -143,6 +143,9 @@ public class DayChooser extends VBox {
         if(date.equals(selectedDateProperty.get())) {
             lblDate.getStyleClass().add("daychooser-selected-day");
         }
+        if(date.equals(LocalDate.now())) {
+            lblDate.getStyleClass().add("daychooser-current-day");
+        }
 
         return lblDate;
     }
