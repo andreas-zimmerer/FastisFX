@@ -1,5 +1,6 @@
 package com.jibbow.fastis;
 
+import com.jibbow.fastis.components.TimeIndicator;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
 import com.jibbow.fastis.components.DayPane;
 import com.jibbow.fastis.components.TimeAxis;
@@ -152,7 +153,7 @@ public class WeekView extends CalendarView {
             final LocalDate currentDate = dateProperty.get().plusDays(i);
 
             List<Appointment> allAppointments = calendars.stream()
-                    .flatMap(cal -> cal.getAppointmentsFor(dateProperty.get()).stream())
+                    .flatMap(cal -> cal.getAppointmentsFor(currentDate).stream())
                     .collect(Collectors.toList());
 
 
@@ -172,7 +173,8 @@ public class WeekView extends CalendarView {
 
             // create a new DayPane for each day
             final DayPane dp = new DayPane(currentDate);
-            dayPanesContainer.add(dp, i, 0);
+            final TimeIndicator indicator = new TimeIndicator(dp);
+            dayPanesContainer.add(indicator, i, 0);
             // populate DayPane
             allAppointments.forEach(a -> dp.addAppointment(a));
         }

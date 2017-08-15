@@ -1,6 +1,7 @@
 package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
+import com.jibbow.fastis.WeekView;
 import com.jibbow.fastis.util.PercentPane;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.geometry.Insets;
@@ -40,6 +41,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
     @Override
     public Region createGuiElement(Appointment appointment) {
         BorderPane p = new BorderPane();
+        p.getStylesheets().add(DayPaneRenderer.class.getClassLoader().getResource("css/Appointment.css").toString());
         p.getStyleClass().add("appointment");
 
         VBox content = new VBox();

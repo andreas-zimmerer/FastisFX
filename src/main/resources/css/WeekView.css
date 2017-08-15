@@ -1,27 +1,21 @@
-.root {
+.weekview {
 
 }
 
-.appointment {
-    -fx-background-color: #ffab91;
-    -fx-background-radius: 3.0;
-    -fx-border-radius: 3.0;
-    -fx-padding: 0 3 0 3;
-    -fx-background-insets: 0 3 0 3;
-}
-
-.appointment .leftbar {
-    -fx-background-color: #ff7043;
-    -fx-background-radius: 3 0 0 3;
-}
-
-.appointment .lblStartTime {
-    -fx-font-size: 10;
-    -fx-text-fill: #bf360c;
-}
-
-.headerpane {
+.weekview-header-container {
     -fx-background-color: white;
+}
+
+.weekview-scrollpane {
+
+}
+
+.weekview-scrollpane-content {
+
+}
+
+.weekview-timeaxis-container {
+
 }
 
 .weekview-day-header-container {
@@ -33,6 +27,9 @@
 .weekview-daypane-container {
     -fx-grid-lines-visible: true;
 }
+
+
+
 
 .time-indicator-label {
     -fx-font-size: 10;
