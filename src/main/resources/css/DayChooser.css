@@ -13,7 +13,6 @@
 
 .daychooser-weekend {
     -fx-text-fill: dodgerblue;
-    -fx-font-weight: bold;
 }
 
 .daychooser-weekday {
@@ -22,6 +21,7 @@
 
 .daychooser-selected-day {
     -fx-background-color: dodgerblue;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
 }
 
@@ -40,4 +40,8 @@
 
 .daychooser-current-day {
     -fx-text-fill: orange;
+}
+
+.button {
+    -fx-background-color: white;
 }
