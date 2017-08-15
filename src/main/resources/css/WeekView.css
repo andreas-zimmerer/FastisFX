@@ -21,15 +21,17 @@
 .weekview-day-header-container {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, #8F8F8FB0, 8, 0.0, -3, 8);
-    -fx-grid-lines-visible: true;
 }
 
 .weekview-daypane-container {
-    -fx-grid-lines-visible: true;
+
 }
 
 
-
+.day-background {
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 0 0.5;
+}
 
 .time-indicator-label {
     -fx-font-size: 10;
@@ -43,17 +45,20 @@
     -fx-stroke: blue;
 }
 
+
+
+
+/*
+    HEADER
+ */
 .label-weekday {
     -fx-font-size: 22;
     -fx-padding: 5 10 10 4;
 }
 
 .label-date {
-    -fx-font-size: 10;
     -fx-padding: 5 0 11 0;
-    -fx-text-fill: darkgray;
 }
-
 
 .day-chooser .context-menu {
     -fx-background-color: white;
@@ -70,4 +75,32 @@
 
 .day-chooser .custom-menu-item:focused {
     -fx-background-color: white;
+}
+
+.header-button {
+    -fx-background-color: white;
+    -fx-padding: 2 5 2 5;
+    -fx-background-insets: 2 1 0 0;
+    -fx-font-size: 20;
+    -fx-effect: dropshadow(three-pass-box, gray, 2, 0.0, 0, 0);
+}
+.header-button:hover {
+    -fx-effect: dropshadow(three-pass-box, gray, 5, 0.0, 0, 0);
+}
+
+/*
+    header for every single day
+ */
+.header-weekday {
+
+}
+
+.header-date {
+    -fx-font-size: 10;
+    -fx-text-fill: gray;
+}
+
+.header-container {
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 0 0.5;
 }

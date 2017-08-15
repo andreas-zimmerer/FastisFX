@@ -54,12 +54,12 @@ public class WeekView extends CalendarView {
             this.getCalendars().add(calendar[i]);
         }
 
+        setLayout();
+        setContent();
+
         getDate().addListener(observable -> {
             setContent();
         });
-
-        setLayout();
-        setContent();
     }
 
     private void setLayout() {

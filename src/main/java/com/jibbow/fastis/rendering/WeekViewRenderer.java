@@ -12,12 +12,16 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.text.DateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Jibbow on 8/14/17.
@@ -53,10 +57,10 @@ public class WeekViewRenderer extends DayPaneRenderer {
         );
 
         final Button left = new Button("<");
-        left.getStyleClass().add("day-header-button");
+        left.getStyleClass().add("header-button");
         left.setOnAction(event -> calView.getDate().set(calView.getDate().get().minusDays(1)));
         final Button right = new Button(">");
-        right.getStyleClass().add("day-header-button");
+        right.getStyleClass().add("header-button");
         right.setOnAction(event -> calView.getDate().set(calView.getDate().get().plusDays(1)));
 
         final ColumnConstraints columnWeekday = new ColumnConstraints(70);
@@ -74,10 +78,18 @@ public class WeekViewRenderer extends DayPaneRenderer {
         if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY)
                 || date.getDayOfWeek().equals(DayOfWeek.SATURDAY))
             p.setStyle("-fx-background-color: lightgoldenrodyellow");
+        p.getStyleClass().add("day-background");
         return p;
     }
 
     public Node createSingleDayHeader(LocalDate date) {
-        return new Label(date.toString());
+        final Label lblWeekday = new Label(date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+        lblWeekday.getStyleClass().add("header-weekday");
+        final Label lblDate = new Label(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date));
+        lblDate.getStyleClass().add("header-date");
+        VBox container = new VBox(lblWeekday, lblDate);
+        container.getStyleClass().add("header-container");
+        container.setAlignment(Pos.TOP_CENTER);
+        return container;
     }
 }
