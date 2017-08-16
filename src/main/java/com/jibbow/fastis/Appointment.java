@@ -19,13 +19,13 @@ public class Appointment {
     private BooleanProperty isFullDayProperty = new SimpleBooleanProperty(false);
 
 
-    public Appointment(boolean isFullDay, LocalDate date) {
-        this(isFullDay, date, "");
+    public Appointment(LocalDate date) {
+        this(date, "");
     }
-    public Appointment(boolean isFullDay, LocalDate date, String title) {
-        this(isFullDay, date, new SimpleStringProperty(title));
+    public Appointment(LocalDate date, String title) {
+        this(date, new SimpleStringProperty(title));
     }
-    public Appointment(boolean isFullDay, LocalDate date, StringProperty title) {
+    public Appointment(LocalDate date, StringProperty title) {
         this.intervalProperty = new SimpleObjectProperty<>(new TimeInterval(date, date));
         this.titleProperty = title;
         setFullDay(true);

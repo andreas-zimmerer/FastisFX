@@ -74,7 +74,7 @@ public class DayPane extends PercentPane {
 
 
     /**
-     * Removes an appointment from the DayView so that it will not be rendered.
+     * Removes an appointment from the DayCalendarView so that it will not be rendered.
      * @param appointment Appointment to be removed.
      */
     public void removeAppointment(Appointment appointment) {

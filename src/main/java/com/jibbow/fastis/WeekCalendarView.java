@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jibbow on 8/12/17.
  */
-public class WeekView extends CalendarView {
+public class WeekCalendarView extends CalendarView {
     private static final int dayPaneMinWidth = 50;
 
     protected final int numberOfDays;
@@ -33,20 +33,20 @@ public class WeekView extends CalendarView {
     protected WeekViewRenderer renderer;
 
 
-    public WeekView(LocalDate dateBegin, Calendar... calendar) {
+    public WeekCalendarView(LocalDate dateBegin, Calendar... calendar) {
         this(new SimpleObjectProperty<>(dateBegin), calendar);
     }
 
-    public WeekView(ObjectProperty<LocalDate> dateBegin, Calendar... calendar) {
+    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, Calendar... calendar) {
         this(dateBegin, 7, calendar);
     }
 
-    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
+    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
         this(dateBegin, numberOfDays, new WeekViewRenderer(), calendar);
     }
 
-    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, WeekViewRenderer renderer, Calendar... calendar) {
-        this.getStylesheets().add(WeekView.class.getClassLoader().getResource("css/WeekView.css").toString());
+    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, WeekViewRenderer renderer, Calendar... calendar) {
+        this.getStylesheets().add(WeekCalendarView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = dateBegin;
         this.numberOfDays = numberOfDays;
         this.renderer = renderer;

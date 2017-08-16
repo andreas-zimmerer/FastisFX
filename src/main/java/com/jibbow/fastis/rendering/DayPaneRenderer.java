@@ -1,7 +1,6 @@
 package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
-import com.jibbow.fastis.WeekView;
 import com.jibbow.fastis.util.PercentPane;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.geometry.Insets;

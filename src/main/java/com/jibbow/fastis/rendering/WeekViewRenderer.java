@@ -2,7 +2,7 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.DayChooser;
-import com.jibbow.fastis.WeekView;
+import com.jibbow.fastis.WeekCalendarView;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,14 +12,11 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-import java.text.DateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,7 +29,7 @@ public class WeekViewRenderer extends DayPaneRenderer {
         return pane;
     }
 
-    public Node createHeaderPane(WeekView calView) {
+    public Node createHeaderPane(WeekCalendarView calView) {
         final GridPane container = new GridPane();
         container.setAlignment(Pos.BOTTOM_LEFT);
         container.getStyleClass().add("headerpane");

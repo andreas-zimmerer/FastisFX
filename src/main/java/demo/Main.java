@@ -2,9 +2,7 @@ package demo;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.Calendar;
-import com.jibbow.fastis.DayView;
-import com.jibbow.fastis.WeekView;
-import com.jibbow.fastis.rendering.DayViewRenderer;
+import com.jibbow.fastis.WeekCalendarView;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -38,7 +36,7 @@ public class Main extends Application {
         cal.addAll(app, app3);
 
 
-        WeekView root1 =  new WeekView(LocalDate.now(), cal);
+        WeekCalendarView root1 =  new WeekCalendarView(LocalDate.now(), cal);
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");

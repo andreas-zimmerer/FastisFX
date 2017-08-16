@@ -19,6 +19,13 @@ public class Calendar extends ModifiableObservableListBase<Appointment> {
 
     ObservableList<Appointment> appointments = FXCollections.observableList(new LinkedList<>());
 
+    public Calendar() {
+
+    }
+    public Calendar(Appointment... appointments) {
+        this.appointments.setAll(appointments);
+    }
+
 
     public List<Appointment> getAppointmentsFor(LocalDate date) {
         return getAppointmentsBetween(new TimeInterval(LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX)));
