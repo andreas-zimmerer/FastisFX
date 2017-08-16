@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 group 'jibbow'
 version '0.0.1-alpha'
 
@@ -25,6 +27,12 @@ repositories {
 
 apply plugin: 'javafx-gradle-plugin'
 
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+description = 'Fastis - a calendar widget library for JavaFX'
 
 jfx {
     // minimal requirement for jfxJar-task
@@ -34,4 +42,26 @@ jfx {
 
     // minimal requirement for jfxNative-task
     vendor = 'Jibbow'
+}
+
+
+// build library JAR
+jar {
+    manifest {
+        attributes(
+                'Built-By': 'Jibbow',
+                'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+                'Build-Date': project.buildDate,
+                'Build-Time': project.buildTime,
+                'Specification-Title': project.name,
+                'Specification-Version': project.version,
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Bundle-Name': project.name,
+                'Bundle-License': 'http://www.gnu.de/documents/gpl-3.0.en.html',
+                'Bundle-Description': description,
+                'Bundle-SymbolicName': 'com.jibbow.fastis',
+                'Export-Package': 'com.jibbow.fastis,com.jibbow.fastis.components,com.jibbow.fastis.rendering'
+        )
+    }
 }

@@ -99,19 +99,18 @@
     header for every single day
  */
 .header-weekday {
-
+    -fx-text-fill: slategray;
+    -fx-font-size: 10;
 }
 
 .header-date {
-    -fx-font-size: 10;
-    -fx-text-fill: gray;
+    -fx-font-size: 12;
 }
 
 .header-container {
     -fx-border-width: 0 0 2.5 0;
     -fx-border-color: transparent;
-    -fx-padding: 0 0 5 0;
-    -fx-border-insets: 0 0 8 0;
+    -fx-padding: 0 0 2 0;
 }
 
 .header-container-today {

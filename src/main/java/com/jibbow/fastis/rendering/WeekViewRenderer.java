@@ -88,7 +88,7 @@ public class WeekViewRenderer extends DayPaneRenderer {
         lblWeekday.getStyleClass().add("header-weekday");
         final Label lblDate = new Label(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date));
         lblDate.getStyleClass().add("header-date");
-        VBox container = new VBox(lblWeekday, lblDate);
+        VBox container = new VBox(lblDate, lblWeekday);
         container.getStyleClass().add("header-container");
         if(date.equals(LocalDate.now())) {
             container.getStyleClass().add("header-container-today");
