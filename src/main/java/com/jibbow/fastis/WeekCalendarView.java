@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  */
 public class WeekCalendarView extends CalendarView {
     private static final int dayPaneMinWidth = 50;
+    protected LocalTime dayStartTime;
+    protected LocalTime dayEndTime;
 
     protected int numberOfDays;
     protected Pane weekHeaderContainer;
@@ -59,6 +61,8 @@ public class WeekCalendarView extends CalendarView {
         this.getStylesheets().add(WeekCalendarView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = dateBegin;
         this.numberOfDays = numberOfDays;
+        this.dayStartTime = LocalTime.MIN;
+        this.dayEndTime = LocalTime.MAX;
         this.renderer = renderer;
         for (int i = 0; i < calendar.length; i++) {
             this.getCalendars().add(calendar[i]);
@@ -186,7 +190,7 @@ public class WeekCalendarView extends CalendarView {
             dayPanesContainer.add(dayBackground, i, 0);
 
             // create a new DayPane for each day
-            final DayPane dp = new DayPane(currentDate);
+            final DayPane dp = new DayPane(currentDate, dayStartTime, dayEndTime, renderer);
             final TimeIndicator indicator = new TimeIndicator(dp);
             dayPanesContainer.add(indicator, i, 0);
             // populate DayPane
