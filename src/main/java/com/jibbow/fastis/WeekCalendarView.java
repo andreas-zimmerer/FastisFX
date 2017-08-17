@@ -74,6 +74,10 @@ public class WeekCalendarView extends CalendarView {
         getDate().addListener(observable -> {
             setContent();
         });
+
+        getCalendars().addListener((InvalidationListener) observable -> {
+            setContent();
+        });
     }
 
     private void setLayout() {
