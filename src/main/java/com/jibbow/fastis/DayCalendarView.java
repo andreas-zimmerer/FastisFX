@@ -12,6 +12,9 @@ import java.time.LocalDate;
 public class DayCalendarView extends WeekCalendarView {
 
 
+    public DayCalendarView() {
+        this(LocalDate.now(), new Calendar());
+    }
     public DayCalendarView(LocalDate date, Calendar... calendar) {
         this(new SimpleObjectProperty<>(date), calendar);
     }

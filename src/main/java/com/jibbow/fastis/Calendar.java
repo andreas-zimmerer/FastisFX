@@ -22,16 +22,19 @@ public class Calendar extends ModifiableObservableListBase<Appointment> {
     public Calendar() {
 
     }
+    public Calendar(ObservableList<Appointment> appointments) {
+        this.appointments = appointments;
+    }
     public Calendar(Appointment... appointments) {
         this.appointments.setAll(appointments);
     }
 
 
-    public List<Appointment> getAppointmentsFor(LocalDate date) {
+    public FilteredList<Appointment> getAppointmentsFor(LocalDate date) {
         return getAppointmentsBetween(new TimeInterval(LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX)));
     }
 
-    public List<Appointment> getAppointmentsBetween(TimeInterval interval) {
+    public FilteredList<Appointment> getAppointmentsBetween(TimeInterval interval) {
         return new FilteredList<Appointment>(appointments, appointment -> appointment.intervalProperty().get().overlaps(interval));
     }
 

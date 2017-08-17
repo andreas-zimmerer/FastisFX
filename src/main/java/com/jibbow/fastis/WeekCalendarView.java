@@ -4,8 +4,13 @@ import com.jibbow.fastis.components.TimeIndicator;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
 import com.jibbow.fastis.components.DayPane;
 import com.jibbow.fastis.components.TimeAxis;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -17,6 +22,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +33,7 @@ import java.util.stream.Collectors;
 public class WeekCalendarView extends CalendarView {
     private static final int dayPaneMinWidth = 50;
 
-    protected final int numberOfDays;
+    protected int numberOfDays;
     protected Pane weekHeaderContainer;
     protected GridPane dayHeadersContainer;
     protected GridPane dayPanesContainer;
@@ -33,6 +41,12 @@ public class WeekCalendarView extends CalendarView {
     protected WeekViewRenderer renderer;
 
 
+    /**
+     * Creates a new WeekCalendar displaying the current week (7 days) and with a new empty calendar.
+     */
+    public WeekCalendarView() {
+        this(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()), new Calendar());
+    }
     public WeekCalendarView(LocalDate dateBegin, Calendar... calendar) {
         this(new SimpleObjectProperty<>(dateBegin), calendar);
     }
@@ -152,9 +166,8 @@ public class WeekCalendarView extends CalendarView {
         for (int i = 0; i < numberOfDays; i++) {
             final LocalDate currentDate = dateProperty.get().plusDays(i);
 
-            List<Appointment> allAppointments = calendars.stream()
-                    .flatMap(cal -> cal.getAppointmentsFor(currentDate).stream())
-                    .collect(Collectors.toList());
+            final List<FilteredList<Appointment>> allAppointments =
+                    calendars.stream().map(appointments -> appointments.getAppointmentsFor(currentDate)).collect(Collectors.toList());
 
 
             // populate header pane for each day
@@ -163,6 +176,7 @@ public class WeekCalendarView extends CalendarView {
 
             // populate pane for all-day appointments
             final Node allDay = renderer.createAllDayPane(allAppointments.parallelStream()
+                    .flatMap(appointments -> appointments.stream())
                     .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
             dayHeadersContainer.add(allDay, i, 1);
 
@@ -176,8 +190,26 @@ public class WeekCalendarView extends CalendarView {
             final TimeIndicator indicator = new TimeIndicator(dp);
             dayPanesContainer.add(indicator, i, 0);
             // populate DayPane
-            allAppointments.forEach(a -> dp.addAppointment(a));
+            allAppointments.stream().flatMap(appointments -> appointments.stream()).forEach(a -> dp.addAppointment(a));
+
+            // update DayPane when calendar changes
+            allAppointments.forEach(appointments -> appointments.addListener((ListChangeListener<Appointment>) c -> {
+                while(c.next()) {
+                    for(Appointment a : c.getAddedSubList()) {
+                        dp.addAppointment(a);
+                    }
+                    for(Appointment a : c.getRemoved()) {
+                        dp.removeAppointment(a);
+                    }
+                }
+            }));
         }
+    }
+
+
+
+    private void populateSingleDay() {
+
     }
 
     public LocalDate getStartDate() {

@@ -33,7 +33,7 @@ public class Main extends Application {
         //root1.dayPane.addAppointment(app3);
         //Appointment appfullday = new Appointment(true, LocalDate.now());
         //root1.dayPane.addAppointment(appfullday);
-        cal.addAll(app, app3);
+        cal.addAll(app);
 
 
         WeekCalendarView root1 =  new WeekCalendarView(LocalDate.now(), cal);
@@ -44,7 +44,7 @@ public class Main extends Application {
         stage.setMinHeight(100);
         stage.show();
 
-
+cal.add(app3);
     }
 }
 
