@@ -8,7 +8,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -19,8 +18,6 @@ import javafx.scene.layout.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Observable;
 import java.util.stream.Collectors;
 
 /**
@@ -54,15 +51,15 @@ public class WeekCalendarView extends CalendarView {
     }
 
     public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
-        this(dateBegin, numberOfDays, new WeekViewRenderer(), calendar);
+        this(dateBegin, numberOfDays, LocalTime.MIN, LocalTime.MAX, new WeekViewRenderer(), calendar);
     }
 
-    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, WeekViewRenderer renderer, Calendar... calendar) {
+    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, LocalTime dayStartTime, LocalTime dayEndTime, WeekViewRenderer renderer, Calendar... calendar) {
         this.getStylesheets().add(WeekCalendarView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = dateBegin;
         this.numberOfDays = numberOfDays;
-        this.dayStartTime = LocalTime.MIN;
-        this.dayEndTime = LocalTime.MAX;
+        this.dayStartTime = dayStartTime;
+        this.dayEndTime = dayEndTime;
         this.renderer = renderer;
         for (int i = 0; i < calendar.length; i++) {
             this.getCalendars().add(calendar[i]);
