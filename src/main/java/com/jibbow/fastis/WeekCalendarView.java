@@ -159,7 +159,7 @@ public class WeekCalendarView extends CalendarView {
         this.dayHeadersContainer.getChildren().clear();
         this.dayPanesContainer.getChildren().clear();
 
-        this.timeAxisContainer.getChildren().add(new TimeAxis(LocalTime.MIN, LocalTime.MAX, Duration.ofHours(1)));
+        this.timeAxisContainer.getChildren().add(new TimeAxis(dayStartTime, dayEndTime, Duration.ofHours(1)));
         this.weekHeaderContainer.getChildren().add(renderer.createHeaderPane(this));
 
 
