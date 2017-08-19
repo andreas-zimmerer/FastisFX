@@ -27,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        WeekCalendarView root1 =  new WeekCalendarView(LocalDate.now(), new Calendar());
+        WeekCalendarView root1 =  new WeekCalendarView(LocalDate.now(), new Calendar(new Appointment(LocalDate.now(), "test")));
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");
@@ -36,7 +36,7 @@ public class Main extends Application {
         stage.show();
 
 
-        testCalendar(root1);
+        //testCalendar(root1);
     }
 
 
@@ -46,6 +46,8 @@ public class Main extends Application {
         Appointment app1 = new Appointment(new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(2)), "Appointment1");
         Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(5)), "Appointment2");
         Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(5), LocalDateTime.now().plusHours(6)), "Appointment3");
+        Appointment app_allday1 = new Appointment(LocalDate.now(), "Allday1");
+        Appointment app_allday2 = new Appointment(LocalDate.now(), "Allday2");
         Calendar cal1 = new Calendar(app1, app2);
         Calendar cal2 = new Calendar();
 
@@ -93,6 +95,16 @@ public class Main extends Application {
         tasks.add(() -> {
             System.out.println("moving the first appointment to the next day");
             app1.intervalProperty().set(new TimeInterval(LocalDateTime.now().plusDays(1), LocalDateTime.now().plusHours(2).plusDays(1)));
+        });
+
+        tasks.add(() -> {
+            System.out.println("Adding all-day appointment");
+            cal1.add(app_allday1);
+        });
+
+        tasks.add(() -> {
+            System.out.println("Adding another all-day appointment");
+            cal1.add(app_allday2);
         });
 
 

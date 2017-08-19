@@ -15,3 +15,9 @@
     -fx-font-size: 10;
     -fx-text-fill: #bf360c;
 }
+
+.appointment-fullday {
+    -fx-background-color: mediumslateblue;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 0 1;
+}

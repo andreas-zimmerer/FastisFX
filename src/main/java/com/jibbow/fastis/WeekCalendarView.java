@@ -4,6 +4,7 @@ import com.jibbow.fastis.components.DayPane;
 import com.jibbow.fastis.components.TimeAxis;
 import com.jibbow.fastis.components.TimeIndicator;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
+import com.jibbow.fastis.util.TimeInterval;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,6 +18,7 @@ import javafx.scene.layout.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.stream.Collectors;
 
@@ -178,6 +180,8 @@ public class WeekCalendarView extends CalendarView {
             // populate pane for all-day appointments
             final Node allDay = renderer.createAllDayPane(getCalendars().parallelStream()
                     .flatMap(appointments -> appointments.stream())
+                    .filter(appointment -> appointment.intervalProperty().get().overlaps(
+                            new TimeInterval(LocalDateTime.of(currentDate, LocalTime.MIN), LocalDateTime.of(currentDate, LocalTime.MAX))))
                     .filter(appointment -> appointment.isFullDayProperty().get()).collect(Collectors.toList()));
             dayHeadersContainer.add(allDay, i, 1);
 
@@ -209,11 +213,6 @@ public class WeekCalendarView extends CalendarView {
         }
     }
 
-
-
-    private void populateSingleDay() {
-
-    }
 
     public LocalDate getStartDate() {
         return dateProperty.get();

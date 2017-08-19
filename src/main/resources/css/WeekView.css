@@ -116,3 +116,17 @@
 .header-container-today {
     -fx-border-color: indianred;
 }
+
+.allday-appointment-pane {
+    -fx-background-radius: 5 0 0 0;
+    -fx-background-color: mediumslateblue;
+    -fx-border-radius: 5 0 0 0;
+    -fx-border-color: white;
+    -fx-border-width: 1 0 0 1;
+    -fx-padding: 0 5 0 5;
+}
+
+.allday-appointment-title {
+    -fx-padding: 0 0 0 5;
+    -fx-font-size: 11;
+}

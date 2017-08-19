@@ -25,7 +25,27 @@ import java.util.Locale;
  */
 public class WeekViewRenderer extends DayPaneRenderer {
     public Node createAllDayPane(List<Appointment> appointments) {
+        // sort appointments by what?
         AnchorPane pane = new AnchorPane();
+        int i = 0;
+        for(Appointment a : appointments) {
+            AnchorPane appPane = new AnchorPane();
+            appPane.getStyleClass().add("allday-appointment-pane");
+            appPane.setPrefHeight((appointments.size() - i) * 15);
+            appPane.setMaxHeight(Region.USE_PREF_SIZE);
+            appPane.setMinHeight(Region.USE_PREF_SIZE);
+            AnchorPane.setLeftAnchor(appPane, 10.0 * i);
+            AnchorPane.setBottomAnchor(appPane, 0.0);
+            AnchorPane.setRightAnchor(appPane, 0.0);
+            pane.getChildren().add(appPane);
+
+            Label lblTitle = new Label(a.titleProperty().get());
+            lblTitle.getStyleClass().add("allday-appointment-title");
+            AnchorPane.setRightAnchor(lblTitle, 0.0);
+            appPane.getChildren().add(lblTitle);
+
+            i++;
+        }
         return pane;
     }
 

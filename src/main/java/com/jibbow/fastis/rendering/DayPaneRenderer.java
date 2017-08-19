@@ -39,26 +39,33 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
     @Override
     public Region createGuiElement(Appointment appointment) {
-        BorderPane p = new BorderPane();
-        p.getStylesheets().add(DayPaneRenderer.class.getClassLoader().getResource("css/Appointment.css").toString());
-        p.getStyleClass().add("appointment");
+        if(appointment.isFullDayProperty().get()) {
+            Pane p = new Pane();
+            p.getStylesheets().add(DayPaneRenderer.class.getClassLoader().getResource("css/Appointment.css").toString());
+            p.getStyleClass().add("appointment-fullday");
+            return p;
+        } else {
+            BorderPane p = new BorderPane();
+            p.getStylesheets().add(DayPaneRenderer.class.getClassLoader().getResource("css/Appointment.css").toString());
+            p.getStyleClass().add("appointment");
 
-        VBox content = new VBox();
+            VBox content = new VBox();
 
-        Label starttime = new Label(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(appointment.startTimeProperty()));
-        starttime.getStyleClass().add("lblStartTime");
-        content.getChildren().add(starttime);
-        Label title = new Label(appointment.titleProperty().get());
-        content.getChildren().add(title);
+            Label starttime = new Label(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(appointment.startTimeProperty()));
+            starttime.getStyleClass().add("lblStartTime");
+            content.getChildren().add(starttime);
+            Label title = new Label(appointment.titleProperty().get());
+            content.getChildren().add(title);
 
-        Pane leftBar = new Pane();
-        leftBar.getStyleClass().add("leftbar");
-        leftBar.setPrefWidth(5.0);
+            Pane leftBar = new Pane();
+            leftBar.getStyleClass().add("leftbar");
+            leftBar.setPrefWidth(5.0);
 
-        p.setLeft(leftBar);
-        p.setCenter(content);
-        p.setMargin(content, new Insets(0.0, 5.0, 0.0, 5.0));
-        return p;
+            p.setLeft(leftBar);
+            p.setCenter(content);
+            p.setMargin(content, new Insets(0.0, 5.0, 0.0, 5.0));
+            return p;
+        }
     }
 
     @Override
@@ -103,6 +110,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
                 if (guiElements.get(a) != null) {
                     PercentPane.setLeftAnchor(guiElements.get(a), 0.0);
                     guiElements.get(a).setMaxWidth(10.0);
+                    guiElements.get(a).setMinWidth(10.0);
                     numberoffulldayapp++;
                 }
             } else {
