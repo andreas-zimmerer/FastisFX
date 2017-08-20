@@ -223,4 +223,8 @@ public class WeekCalendarView extends CalendarView {
     public LocalDate getEndDate() {
         return dateProperty.get().plusDays(numberOfDays - 1);
     }
+
+    public void update() {
+        this.setContent();
+    }
 }
