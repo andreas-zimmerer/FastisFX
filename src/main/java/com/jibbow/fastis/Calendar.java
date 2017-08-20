@@ -1,6 +1,7 @@
 package com.jibbow.fastis;
 
 import com.jibbow.fastis.util.TimeInterval;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ModifiableObservableListBase;
 import javafx.collections.ObservableList;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class Calendar extends ModifiableObservableListBase<Appointment> {
 
-    ObservableList<Appointment> appointments = FXCollections.observableList(new LinkedList<>());
+    ObservableList<Appointment> appointments = FXCollections.observableArrayList(app -> new Observable[]{ app.intervalProperty() });
 
     public Calendar() {
 

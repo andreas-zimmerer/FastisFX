@@ -36,7 +36,7 @@ public class Main extends Application {
         stage.show();
 
 
-        //testCalendar(root1);
+        testCalendar(root1);
     }
 
 
