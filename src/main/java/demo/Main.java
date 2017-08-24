@@ -1,9 +1,6 @@
 package demo;
 
-import com.jibbow.fastis.Appointment;
-import com.jibbow.fastis.Calendar;
-import com.jibbow.fastis.CalendarView;
-import com.jibbow.fastis.WeekCalendarView;
+import com.jibbow.fastis.*;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -29,7 +25,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        WeekCalendarView root1 = new WeekCalendarView(LocalDate.now(), new Calendar());
+        WeekView root1 = new WeekView(LocalDate.now(), new Calendar());
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");

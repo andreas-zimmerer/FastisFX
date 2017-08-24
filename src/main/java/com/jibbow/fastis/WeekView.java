@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jibbow on 8/12/17.
  */
-public class WeekCalendarView extends CalendarView {
+public class WeekView extends CalendarView {
     private static final int dayPaneMinWidth = 50;
     protected LocalTime dayStartTime;
     protected LocalTime dayEndTime;
@@ -43,23 +43,23 @@ public class WeekCalendarView extends CalendarView {
     /**
      * Creates a new WeekCalendar displaying the current week (7 days) and with a new empty calendar.
      */
-    public WeekCalendarView() {
+    public WeekView() {
         this(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()), new Calendar());
     }
-    public WeekCalendarView(LocalDate dateBegin, Calendar... calendar) {
+    public WeekView(LocalDate dateBegin, Calendar... calendar) {
         this(new SimpleObjectProperty<>(dateBegin), calendar);
     }
 
-    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, Calendar... calendar) {
+    public WeekView(ObjectProperty<LocalDate> dateBegin, Calendar... calendar) {
         this(dateBegin, 7, calendar);
     }
 
-    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
+    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
         this(dateBegin, numberOfDays, LocalTime.MIN, LocalTime.MAX, new WeekViewRenderer(), calendar);
     }
 
-    public WeekCalendarView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, LocalTime dayStartTime, LocalTime dayEndTime, WeekViewRenderer renderer, Calendar... calendar) {
-        this.getStylesheets().add(WeekCalendarView.class.getClassLoader().getResource("css/WeekView.css").toString());
+    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, LocalTime dayStartTime, LocalTime dayEndTime, WeekViewRenderer renderer, Calendar... calendar) {
+        this.getStylesheets().add(WeekView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = dateBegin;
         this.numberOfDays = numberOfDays;
         this.dayStartTime = dayStartTime;

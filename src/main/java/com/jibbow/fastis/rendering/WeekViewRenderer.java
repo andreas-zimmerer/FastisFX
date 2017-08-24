@@ -2,7 +2,7 @@ package com.jibbow.fastis.rendering;
 
 import com.jibbow.fastis.Appointment;
 import com.jibbow.fastis.DayChooser;
-import com.jibbow.fastis.WeekCalendarView;
+import com.jibbow.fastis.WeekView;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -49,7 +49,7 @@ public class WeekViewRenderer extends DayPaneRenderer {
         return pane;
     }
 
-    public Node createHeaderPane(WeekCalendarView calView) {
+    public Node createHeaderPane(WeekView calView) {
         final GridPane container = new GridPane();
         container.setAlignment(Pos.BOTTOM_LEFT);
         container.getStyleClass().add("headerpane");

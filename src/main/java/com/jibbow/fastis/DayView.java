@@ -10,21 +10,21 @@ import java.time.LocalTime;
 /**
  * Created by Jibbow on 8/12/17.
  */
-public class DayCalendarView extends WeekCalendarView {
+public class DayView extends WeekView {
 
 
-    public DayCalendarView() {
+    public DayView() {
         this(LocalDate.now(), new Calendar());
     }
-    public DayCalendarView(LocalDate date, Calendar... calendar) {
+    public DayView(LocalDate date, Calendar... calendar) {
         this(new SimpleObjectProperty<>(date), calendar);
     }
 
-    public DayCalendarView(ObjectProperty<LocalDate> date, Calendar... calendar) {
+    public DayView(ObjectProperty<LocalDate> date, Calendar... calendar) {
         this(date, LocalTime.MIN, LocalTime.MAX, new DayViewRenderer(), calendar);
     }
 
-    public DayCalendarView(ObjectProperty<LocalDate> date, LocalTime dayStartTime, LocalTime dayEndTime, DayViewRenderer renderer, Calendar... calendar) {
+    public DayView(ObjectProperty<LocalDate> date, LocalTime dayStartTime, LocalTime dayEndTime, DayViewRenderer renderer, Calendar... calendar) {
         super(date, 1, dayStartTime, dayEndTime, renderer, calendar);
     }
 }
