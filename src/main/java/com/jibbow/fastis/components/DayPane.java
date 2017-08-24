@@ -117,11 +117,11 @@ public class DayPane extends PercentPane {
      */
     public void removeAppointment(Appointment appointment) {
         Region region = appointments.get(appointment);
+        appointments.remove(appointment);
         if(region != null) {
             this.getChildren().remove(region);
             renderer.layoutAppointments(appointments);
         }
-        appointments.remove(appointment);
     }
 
 
