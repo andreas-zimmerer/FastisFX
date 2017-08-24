@@ -154,7 +154,7 @@ public class DayPane extends PercentPane {
             if(region != null) {
                 this.getChildren().remove(region);
             }
-            region = renderer.createGuiElement(appointment);
+            region = renderer.createAppointmentElement(appointment);
 
             // calculate minutes per day displayed; used for calculating the percentage
             long minutesPerDay = Duration.between(dayStartTimeProperty().get(), dayEndTimeProperty().get()).toMinutes();

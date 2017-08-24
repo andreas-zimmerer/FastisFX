@@ -8,6 +8,34 @@ If you like the project please leave a ⭐! 🎉🎉
 It provides a `WeekView` and a `DayView`. A `MonthView` will be added in the near future.  
 All styling is done via CSS and the visual appearance and layout can be fully adjusted with custom renderers.
 
+## Usage
+
+### Custom renderer
+Most GUI components can be customized by using a custom renderer which overrides the default render methods.
+Even the layout of overlapping appointments can be completely customized.
+```java
+public class CustomRenderer extends WeekViewRenderer {
+    @Override
+    public Region createAppointmentElement(Appointment appointment) { ... }
+    
+    @Override
+    public void layoutAppointments(Map<Appointment, Region> guiElements) { ... }
+    
+    @Override
+    public Node createAllDayPane(List<Appointment> appointments) { ... }
+    
+    @Override
+    public Node createHeaderPane(WeekView calView) { ... }
+    
+    @Override
+    public Node createDayBackground(LocalDate date) { ... }
+    
+    @Override
+    public Node createSingleDayHeader(LocalDate date) { ... }
+}
+```
+
+The `CustomRenderer` can now be plugged into a new `WeekView` when instantiating it.
 
 ## Screenshots
 

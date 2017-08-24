@@ -31,7 +31,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
 
     public DayPaneRenderer() {
-        this(OverlapStyle.FLEX);
+        this(OverlapStyle.STACKING);
     }
 
     public DayPaneRenderer(OverlapStyle style) {
@@ -39,7 +39,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
     }
 
     @Override
-    public Region createGuiElement(Appointment appointment) {
+    public Region createAppointmentElement(Appointment appointment) {
         if(appointment.isFullDayProperty().get()) {
             Pane p = new Pane();
             p.getStylesheets().add(DayPaneRenderer.class.getClassLoader().getResource("css/Appointment.css").toString());

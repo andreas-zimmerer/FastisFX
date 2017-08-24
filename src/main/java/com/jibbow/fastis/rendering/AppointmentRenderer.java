@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public interface AppointmentRenderer {
 
-    Region createGuiElement(Appointment appointment);
+    Region createAppointmentElement(Appointment appointment);
 
     void layoutAppointments(Map<Appointment, Region> guiElements);
 }
