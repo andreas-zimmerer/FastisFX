@@ -86,6 +86,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
     protected void layoutAppointmentsFlex(Map<Appointment, Region> guiElements) {
         List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
                 (o1, o2) -> {
+                    // order appointments: 1. ends first 2. starts first
                     int ending = -(int) Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes();
                     if(ending != 0) return ending;
                     int start = -(int) Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes();
@@ -93,49 +94,53 @@ public class DayPaneRenderer implements AppointmentRenderer {
                 })
                 .collect(Collectors.toList());
 
+        // associates every appointment with a "column" and the number of parallel appointments
         List<Integer> columnIndex = new ArrayList<>(sortedAppointments.size());
-        List<Integer> columnSpan = new ArrayList<>(sortedAppointments.size());
+        List<Integer> columnsParallel = new ArrayList<>(sortedAppointments.size());
 
+        // calculate columnIndex and columnsParallel
         for(int i = 0; i<sortedAppointments.size();i++) {
             Appointment app = sortedAppointments.get(i);
             Region reg = guiElements.get(app);
-            if (reg != null) {
+            if (reg != null) { // only if the current appointment is displayed
                 columnIndex.add(i, 0); // align left
-                columnSpan.add(i, 1); // full width
+                columnsParallel.add(i, 1); // number of parallel appointments -> 1 = full width
 
-                boolean first = true;
-                for(int a = 0; a<i;a++) {
-                    if(sortedAppointments.get(a).intervalProperty().get().overlaps(app.intervalProperty().get())) { // we have a collision
-
-                        if(columnIndex.get(a) > columnIndex.get(i)) {
-                            //columnIndex.set(i,0);
-                            columnSpan.set(i, Math.max(columnSpan.get(a), columnSpan.get(i)));
-
+                boolean newColumn = true; // whether a new column has to be allocated
+                for (int a = 0; a < i; a++) { // check all other appointments that have already been processed
+                    if (sortedAppointments.get(a).intervalProperty().get().overlaps(app.intervalProperty().get())) { // we have a collision
+                        if (columnIndex.get(a) > columnIndex.get(i)) {
+                            // current appointment can fit left of 'a, so no new column has to be allocated
+                            columnsParallel.set(i, Math.max(columnsParallel.get(a), columnsParallel.get(i)));
+                            newColumn = false;
                         } else {
+                            // find a suitable position for the appointment
                             columnIndex.set(i, Math.max(columnIndex.get(a) + 1, columnIndex.get(i)));
-                            columnSpan.set(i, Math.max(columnSpan.get(a) + 1, columnSpan.get(i)));
-                            columnSpan.set(a, columnSpan.get(a) + 1);
+                            if (newColumn) {
+                                // allocate a new column
+                                columnsParallel.set(i, Math.max(columnsParallel.get(a) + 1, columnsParallel.get(i)));
+                                columnsParallel.set(a, columnsParallel.get(a) + 1);
+                            }
                         }
                     }
                 }
             }
         }
 
+        // set layout of all appointments according to columnIndex and columnsParallel
         int i = 0;
-        //int columnCount = columnIndex.stream().max(Integer::compare).get() + 1;
         for(Appointment app : sortedAppointments) {
             Region reg = guiElements.get(app);
             if (reg != null) {
-                double left = 0.0;
-                double right = 0.0;
-
+                // get current values
                 int colIndex = columnIndex.get(i);
-                int colParallel = columnSpan.get(i);
+                int colParallel = columnsParallel.get(i);
 
-                left = (double)colIndex / colParallel;
-                right = 1.0 - (double) (colIndex + 1) / colParallel;
+                // calculate horizontal position
+                double left = (double)colIndex / colParallel;
+                double right = 1.0 - (double) (colIndex + 1) / colParallel;
 
-
+                // set position
                 PercentPane.setLeftAnchor(reg, left);
                 PercentPane.setRightAnchor(reg, right);
             }
