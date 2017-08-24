@@ -132,6 +132,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
                 if (guiElements.get(a) != null) {
                     PercentPane.setRightAnchor(guiElements.get(a), 0.0);
                     PercentPane.setLeftAnchor(guiElements.get(a), 0.1 * stack.size());
+                    guiElements.get(a).toFront();
                 }
             }
         }

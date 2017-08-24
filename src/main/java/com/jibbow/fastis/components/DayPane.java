@@ -81,6 +81,7 @@ public class DayPane extends PercentPane {
         Region region = appointments.get(appointment);
         if(region != null) {
             this.getChildren().remove(region);
+            renderer.layoutAppointments(appointments);
         }
         appointments.remove(appointment);
     }

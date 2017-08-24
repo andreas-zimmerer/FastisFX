@@ -46,6 +46,7 @@ public class Main extends Application {
         Appointment app1 = new Appointment(new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(2)), "Appointment1");
         Appointment app2 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(5)), "Appointment2");
         Appointment app3 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(5), LocalDateTime.now().plusHours(6)), "Appointment3");
+        Appointment app_overlapping1 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)), "Appointment3");
         Appointment app_allday1 = new Appointment(LocalDate.now(), "Allday1");
         Appointment app_allday2 = new Appointment(LocalDate.now(), "Allday2");
         Calendar cal1 = new Calendar(app1, app2);
@@ -65,6 +66,11 @@ public class Main extends Application {
         tasks.add(() -> {
             System.out.println("adding a third appointment to this calendar");
             cal1.add(app3);
+        });
+
+        tasks.add(() -> {
+            System.out.println("adding an overlapping appointment");
+            cal1.add(app_overlapping1);
         });
 
         tasks.add(() -> {
