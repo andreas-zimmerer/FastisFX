@@ -174,6 +174,8 @@ public class DayPane extends PercentPane {
                                 / minutesPerDay);
             }
 
+            PercentPane.setLeftAnchor(region, 0.0);
+            PercentPane.setRightAnchor(region, 0.0);
             this.getChildren().add(region);
             return region;
         } else {
