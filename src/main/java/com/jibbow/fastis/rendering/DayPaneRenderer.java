@@ -85,7 +85,12 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
     protected void layoutAppointmentsFlex(Map<Appointment, Region> guiElements) {
         List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
-                (o1, o2) -> -(int) Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes())
+                (o1, o2) -> {
+                    int ending = -(int) Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes();
+                    if(ending != 0) return ending;
+                    int start = -(int) Duration.between(o1.startTimeProperty(), o2.startTimeProperty()).toMinutes();
+                    return start;
+                })
                 .collect(Collectors.toList());
 
         List<Integer> columnIndex = new ArrayList<>(sortedAppointments.size());
@@ -102,16 +107,15 @@ public class DayPaneRenderer implements AppointmentRenderer {
                 for(int a = 0; a<i;a++) {
                     if(sortedAppointments.get(a).intervalProperty().get().overlaps(app.intervalProperty().get())) { // we have a collision
 
-                        if(first && columnIndex.get(a) != 0) {
-                            columnIndex.set(i,0);
-                            columnSpan.set(i, columnSpan.get(a));
-                            break;
+                        if(columnIndex.get(a) > columnIndex.get(i)) {
+                            //columnIndex.set(i,0);
+                            columnSpan.set(i, Math.max(columnSpan.get(a), columnSpan.get(i)));
+
                         } else {
-                            first = false;
-                        }
-                            columnIndex.set(i, columnIndex.get(a) + 1);
+                            columnIndex.set(i, Math.max(columnIndex.get(a) + 1, columnIndex.get(i)));
+                            columnSpan.set(i, Math.max(columnSpan.get(a) + 1, columnSpan.get(i)));
                             columnSpan.set(a, columnSpan.get(a) + 1);
-                            columnSpan.set(i, columnSpan.get(i) + 1);
+                        }
                     }
                 }
             }
