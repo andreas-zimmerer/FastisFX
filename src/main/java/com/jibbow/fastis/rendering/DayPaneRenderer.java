@@ -10,6 +10,7 @@ import javafx.scene.layout.*;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class DayPaneRenderer implements AppointmentRenderer {
 
 
     public DayPaneRenderer() {
-        this(OverlapStyle.STACKING);
+        this(OverlapStyle.FLEX);
     }
 
     public DayPaneRenderer(OverlapStyle style) {
@@ -83,18 +84,59 @@ public class DayPaneRenderer implements AppointmentRenderer {
     }
 
     protected void layoutAppointmentsFlex(Map<Appointment, Region> guiElements) {
-        int numberoflanes = 1;
         List<Appointment> sortedAppointments = guiElements.keySet().stream().sorted(
                 (o1, o2) -> -(int) Duration.between(o1.endTimeProperty(), o2.endTimeProperty()).toMinutes())
                 .collect(Collectors.toList());
 
-        sortedAppointments.forEach(app -> {
+        List<Integer> columnIndex = new ArrayList<>(sortedAppointments.size());
+        List<Integer> columnSpan = new ArrayList<>(sortedAppointments.size());
+
+        for(int i = 0; i<sortedAppointments.size();i++) {
+            Appointment app = sortedAppointments.get(i);
             Region reg = guiElements.get(app);
             if (reg != null) {
-                PercentPane.setLeftAnchor(reg, 0.0);
-                PercentPane.setRightAnchor(reg, 0.0);
+                columnIndex.add(i, 0); // align left
+                columnSpan.add(i, 1); // full width
+
+                boolean first = true;
+                for(int a = 0; a<i;a++) {
+                    if(sortedAppointments.get(a).intervalProperty().get().overlaps(app.intervalProperty().get())) { // we have a collision
+
+                        if(first && columnIndex.get(a) != 0) {
+                            columnIndex.set(i,0);
+                            columnSpan.set(i, columnSpan.get(a));
+                            break;
+                        } else {
+                            first = false;
+                        }
+                            columnIndex.set(i, columnIndex.get(a) + 1);
+                            columnSpan.set(a, columnSpan.get(a) + 1);
+                            columnSpan.set(i, columnSpan.get(i) + 1);
+                    }
+                }
             }
-        });
+        }
+
+        int i = 0;
+        //int columnCount = columnIndex.stream().max(Integer::compare).get() + 1;
+        for(Appointment app : sortedAppointments) {
+            Region reg = guiElements.get(app);
+            if (reg != null) {
+                double left = 0.0;
+                double right = 0.0;
+
+                int colIndex = columnIndex.get(i);
+                int colParallel = columnSpan.get(i);
+
+                left = (double)colIndex / colParallel;
+                right = 1.0 - (double) (colIndex + 1) / colParallel;
+
+
+                PercentPane.setLeftAnchor(reg, left);
+                PercentPane.setRightAnchor(reg, right);
+            }
+            i++;
+        }
     }
 
     protected void layoutAppointmentsStacking(Map<Appointment, Region> guiElements) {
