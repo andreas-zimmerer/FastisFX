@@ -28,14 +28,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Appointment a1 = new Appointment(new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(2)), "app1");
-        Appointment a2 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)), "app2");
-        Appointment a3 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(4)), "app3");
-        Appointment a4 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), "app4");
-        Appointment a5 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(4)), "app5");
-        Appointment a6 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5)), "app6");
 
-        WeekCalendarView root1 =  new WeekCalendarView(LocalDate.now(), new Calendar(a1,a2,a3,a4,a5,a6));
+        WeekCalendarView root1 = new WeekCalendarView(LocalDate.now(), new Calendar());
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.setTitle("Fastis");
@@ -43,8 +37,21 @@ public class Main extends Application {
         stage.setMinHeight(100);
         stage.show();
 
+        testLayout(root1);
+        testCalendar(root1);
+    }
 
-        //testCalendar(root1);
+
+    private void testLayout(CalendarView calendarView) {
+        Appointment a1 = new Appointment(new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(2)), "app1");
+        Appointment a2 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)), "app2");
+        Appointment a3 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(4)), "app3");
+        Appointment a4 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), "app4");
+        Appointment a5 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(4)), "app5");
+        Appointment a6 = new Appointment(new TimeInterval(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5)), "app6");
+
+        calendarView.getCalendars().clear();
+        calendarView.getCalendars().add(new Calendar(a1,a2,a3,a4,a5,a6));
     }
 
 
