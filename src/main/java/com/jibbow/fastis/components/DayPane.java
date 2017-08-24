@@ -15,24 +15,61 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Jibbow on 8/11/17.
+ * A DayPane is a PercentPane that adds the functionality of automatically adding {@link Appointment} to it.
+ * It is used in {@link com.jibbow.fastis.CalendarView} where a full day is shown.
+ * A DayPane is associated with one date and only appointments that (partly) occur on this date are shown.
+ * If the Interval of an added appointment changes, the DayPane will be updated.
+ * Furthermore, a DayPane has a dayStartTime and a dayEndTime. Both specify the interval where appointments
+ * are being displayed. This is also used for layouting the appointments to the right vertical position.
+ * The DayPane takes care of displaying the right appointments and positioning the appointments vertically
+ * so that they resemble the time when the appointment occurs.
+ * A DayPane is strongly chained to a {@link DayPaneRenderer} which can be set in the constructor.
+ * The {@link DayPaneRenderer} is responsible for creating nodes for each appointment and for layouting them.
+ *
+ * Generally, a DayPane is a typical view that displays exactly one day with its appointments. The appointments
+ * are placed and scaled according the their interval property.
  */
 public class DayPane extends PercentPane {
-    private LocalDate dayDate;
-    private ObjectProperty<LocalTime> dayStartTimeProperty;
-    private ObjectProperty<LocalTime> dayEndTimeProperty;
-    private Map<Appointment, Region> appointments;
-    private DayPaneRenderer renderer;
+    private final LocalDate dayDate;
+    private final ObjectProperty<LocalTime> dayStartTimeProperty;
+    private final ObjectProperty<LocalTime> dayEndTimeProperty;
+    private final Map<Appointment, Region> appointments;
+    private final DayPaneRenderer renderer;
 
 
+    /**
+     * Creates a new DayPane with associated with the given date. The DayPane covers the full day and
+     * uses the default renderer.
+     *
+     * @param date The date associated with this DayPane. Only appointments for this date will be displayed.
+     */
     public DayPane(LocalDate date) {
         this(date, LocalTime.MIN, LocalTime.MAX);
     }
 
+    /**
+     * Creates a new DayPane associated with the given date. The DayPane covers the interval between
+     * dayStartTime and dayEndTime. Only appointments within this interval at this date are displayed.
+     *
+     * @param date          The date associated with this DayPane.
+     * @param dayStartTime  The start value of the time interval being displayed
+     * @param dayEndTime    The end value of the time interval being displayed.
+     */
     public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime) {
         this(date, dayStartTime, dayEndTime, new DayPaneRenderer());
     }
 
+    /**
+     * Creates a new DayPane associated with the given date. The DayPane covers the interval between
+     * dayStartTime and dayEndTime. Only appointments within this interval at this date are displayed.
+     * Additionally a custom renderer can be specified which takes care of the visual appearance of
+     * Appointments.
+     *
+     * @param date          The date associated with this DayPane.
+     * @param dayStartTime  The start value of the time interval being displayed.
+     * @param dayEndTime    The end value of the time interval being displayed.
+     * @param renderer      A custom renderer that is used for displaying appointments.
+     */
     public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime, DayPaneRenderer renderer) {
         this.dayDate = date;
         this.dayStartTimeProperty = new SimpleObjectProperty<>(dayStartTime);
@@ -75,6 +112,7 @@ public class DayPane extends PercentPane {
 
     /**
      * Removes an appointment from the DayCalendarView so that it will not be rendered.
+     *
      * @param appointment Appointment to be removed.
      */
     public void removeAppointment(Appointment appointment) {
@@ -147,14 +185,26 @@ public class DayPane extends PercentPane {
         }
     }
 
+    /**
+     * Returns the date the DayPane is associated with.
+     * @return  The associated date.
+     */
     public LocalDate getDayDate() {
         return dayDate;
     }
 
+    /**
+     * Returns the start value of the displayed interval.
+     * @return The start value of the displayed interval.
+     */
     public ObjectProperty<LocalTime> dayStartTimeProperty() {
         return dayStartTimeProperty;
     }
 
+    /**
+     * Returns the end value of the displayed interval.
+     * @return The end value of the displayed interval.
+     */
     public ObjectProperty<LocalTime> dayEndTimeProperty() {
         return dayEndTimeProperty;
     }
