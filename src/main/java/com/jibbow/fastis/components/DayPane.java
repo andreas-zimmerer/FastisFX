@@ -1,7 +1,9 @@
 package com.jibbow.fastis.components;
 
 import com.jibbow.fastis.Appointment;
-import com.jibbow.fastis.rendering.DayPaneRenderer;
+import com.jibbow.fastis.rendering.AbstractAppointmentFactory;
+import com.jibbow.fastis.rendering.AppointmentRenderer;
+import com.jibbow.fastis.rendering.FlexAppointmentFactory;
 import com.jibbow.fastis.util.PercentPane;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.beans.property.*;
@@ -23,8 +25,8 @@ import java.util.Map;
  * are being displayed. This is also used for layouting the appointments to the right vertical position.
  * The DayPane takes care of displaying the right appointments and positioning the appointments vertically
  * so that they resemble the time when the appointment occurs.
- * A DayPane is strongly chained to a {@link DayPaneRenderer} which can be set in the constructor.
- * The {@link DayPaneRenderer} is responsible for creating nodes for each appointment and for layouting them.
+ * A DayPane is strongly chained to a {@link AppointmentRenderer} which can be set in the constructor.
+ * The {@link AppointmentRenderer} is responsible for creating nodes for each appointment and for layouting them.
  *
  * Generally, a DayPane is a typical view that displays exactly one day with its appointments. The appointments
  * are placed and scaled according the their interval property.
@@ -34,7 +36,7 @@ public class DayPane extends PercentPane {
     private final ObjectProperty<LocalTime> dayStartTimeProperty;
     private final ObjectProperty<LocalTime> dayEndTimeProperty;
     private final Map<Appointment, Region> appointments;
-    private final DayPaneRenderer renderer;
+    private final AbstractAppointmentFactory renderer;
 
 
     /**
@@ -56,7 +58,7 @@ public class DayPane extends PercentPane {
      * @param dayEndTime    The end value of the time interval being displayed.
      */
     public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime) {
-        this(date, dayStartTime, dayEndTime, new DayPaneRenderer());
+        this(date, dayStartTime, dayEndTime, new FlexAppointmentFactory());
     }
 
     /**
@@ -70,7 +72,7 @@ public class DayPane extends PercentPane {
      * @param dayEndTime    The end value of the time interval being displayed.
      * @param renderer      A custom renderer that is used for displaying appointments.
      */
-    public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime, DayPaneRenderer renderer) {
+    public DayPane(LocalDate date, LocalTime dayStartTime, LocalTime dayEndTime, AbstractAppointmentFactory renderer) {
         this.dayDate = date;
         this.dayStartTimeProperty = new SimpleObjectProperty<>(dayStartTime);
         this.dayEndTimeProperty = new SimpleObjectProperty<>(dayEndTime);
@@ -126,7 +128,7 @@ public class DayPane extends PercentPane {
 
 
     /**
-     * Creates a gui element for an appointment with an associated {@link DayPaneRenderer}.
+     * Creates a gui element for an appointment with an associated {@link AppointmentRenderer}.
      * The gui element is automatically added to (or removed from) the DayPane.
      * According to the displayed time interval of the DayPane the relative vertical position
      * of the gui element is set. If the appointments is outside the displayed time interval no
@@ -154,7 +156,7 @@ public class DayPane extends PercentPane {
             if(region != null) {
                 this.getChildren().remove(region);
             }
-            region = renderer.createAppointmentElement(appointment);
+            region = renderer.createAppointment(appointment);
 
             // calculate minutes per day displayed; used for calculating the percentage
             long minutesPerDay = Duration.between(dayStartTimeProperty().get(), dayEndTimeProperty().get()).toMinutes();

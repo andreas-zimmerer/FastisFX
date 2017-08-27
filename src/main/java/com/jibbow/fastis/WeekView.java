@@ -3,6 +3,8 @@ package com.jibbow.fastis;
 import com.jibbow.fastis.components.DayPane;
 import com.jibbow.fastis.components.TimeAxis;
 import com.jibbow.fastis.components.TimeIndicator;
+import com.jibbow.fastis.rendering.AbstractAppointmentFactory;
+import com.jibbow.fastis.rendering.FlexAppointmentFactory;
 import com.jibbow.fastis.rendering.WeekViewRenderer;
 import com.jibbow.fastis.util.TimeInterval;
 import javafx.beans.InvalidationListener;
@@ -38,6 +40,7 @@ public class WeekView extends CalendarView {
     protected GridPane dayPanesContainer;
     protected Pane timeAxisContainer;
     protected WeekViewRenderer renderer;
+    protected AbstractAppointmentFactory appointmentFactory;
 
 
     /**
@@ -55,16 +58,17 @@ public class WeekView extends CalendarView {
     }
 
     public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, Calendar... calendar) {
-        this(dateBegin, numberOfDays, LocalTime.MIN, LocalTime.MAX, new WeekViewRenderer(), calendar);
+        this(dateBegin, numberOfDays, LocalTime.MIN, LocalTime.MAX, new WeekViewRenderer(), new FlexAppointmentFactory(), calendar);
     }
 
-    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, LocalTime dayStartTime, LocalTime dayEndTime, WeekViewRenderer renderer, Calendar... calendar) {
+    public WeekView(ObjectProperty<LocalDate> dateBegin, int numberOfDays, LocalTime dayStartTime, LocalTime dayEndTime, WeekViewRenderer renderer, AbstractAppointmentFactory appointmentFactory, Calendar... calendar) {
         this.getStylesheets().add(WeekView.class.getClassLoader().getResource("css/WeekView.css").toString());
         this.dateProperty = dateBegin;
         this.numberOfDays = numberOfDays;
         this.dayStartTime = dayStartTime;
         this.dayEndTime = dayEndTime;
         this.renderer = renderer;
+        this.appointmentFactory = appointmentFactory;
         for (int i = 0; i < calendar.length; i++) {
             this.getCalendars().add(calendar[i]);
         }
@@ -193,7 +197,7 @@ public class WeekView extends CalendarView {
             dayPanesContainer.add(dayBackground, i, 0);
 
             // create a new DayPane for each day
-            final DayPane dp = new DayPane(currentDate, dayStartTime, dayEndTime, renderer);
+            final DayPane dp = new DayPane(currentDate, dayStartTime, dayEndTime, appointmentFactory);
             final TimeIndicator indicator = new TimeIndicator(dp);
             dayPanesContainer.add(indicator, i, 0);
             // populate DayPane

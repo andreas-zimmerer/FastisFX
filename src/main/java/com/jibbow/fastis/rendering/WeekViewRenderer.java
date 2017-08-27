@@ -23,7 +23,8 @@ import java.util.Locale;
 /**
  * Created by Jibbow on 8/14/17.
  */
-public class WeekViewRenderer extends DayPaneRenderer {
+public class WeekViewRenderer {
+    
     public Node createAllDayPane(List<Appointment> appointments) {
         // sort appointments by what?
         AnchorPane pane = new AnchorPane();
