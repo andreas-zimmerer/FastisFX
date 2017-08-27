@@ -16,7 +16,11 @@ Even the layout of overlapping appointments can be completely customized.
 
 For styling and layouting appointments an abstract factory exists called `AbstractAppointmentFactory`.
 There are also two default concrete implementations: 
- - `FlexAppointmentFactory` layouts overlapping appointments in columns
+ - `FlexAppointmentFactory` layouts overlapping appointments in columns.  
+   Here is an example of the `FLEX` layout:  
+   ![FLEX layout style](screenshots/layout_flex.jpg)
+   
+   
  - `StackingAppointmentFactory` layouts overlapping appointments above each other (but 'stacked')
  
 They both use the same `createAppointment(...)` implementation and therefore have the same style. But they differ
@@ -31,7 +35,3 @@ You can also implement your own `AppointmentFactory`. The default style implemen
 ### WeekView
 ![WeekView](screenshots/WeekView.jpg)
 
-Both `DayView` and `WeekView` support different layout styles for overlapping appointments (e.g. `FLEX` and `STACKING`).  
-Here is an example for the `FLEX` layout style:
-
-![FLEX layout style](screenshots/layout_flex.jpg)
