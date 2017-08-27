@@ -10,32 +10,18 @@ All styling is done via CSS and the visual appearance and layout can be fully ad
 
 ## Usage
 
-### Custom renderer
-Most GUI components can be customized by using a custom renderer which overrides the default render methods.
+### Custom GUI components
+Most GUI components can be customized by using a custom factories.
 Even the layout of overlapping appointments can be completely customized.
-```java
-public class CustomRenderer extends WeekViewRenderer {
-    @Override
-    public Region createAppointmentElement(Appointment appointment) { ... }
-    
-    @Override
-    public void layoutAppointments(Map<Appointment, Region> guiElements) { ... }
-    
-    @Override
-    public Node createAllDayPane(List<Appointment> appointments) { ... }
-    
-    @Override
-    public Node createHeaderPane(WeekView calView) { ... }
-    
-    @Override
-    public Node createDayBackground(LocalDate date) { ... }
-    
-    @Override
-    public Node createSingleDayHeader(LocalDate date) { ... }
-}
-```
 
-The `CustomRenderer` can now be plugged into a new `WeekView` when instantiating it.
+For styling and layouting appointments an abstract factory exists called `AbstractAppointmentFactory`.
+There are also two default concrete implementations: 
+ - `FlexAppointmentFactory` layouts overlapping appointments in columns
+ - `StackingAppointmentFactory` layouts overlapping appointments above each other (but 'stacked')
+ 
+They both use the same `createAppointment(...)` implementation and therefore have the same style. But they differ
+in how overlapping appointments are layouted.  
+You can also implement your own `AppointmentFactory`. The default style implementation can be found in `AppointmentRenderer`.
 
 ## Screenshots
 
