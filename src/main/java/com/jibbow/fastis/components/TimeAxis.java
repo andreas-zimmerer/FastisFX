@@ -2,8 +2,10 @@ package com.jibbow.fastis.components;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
@@ -16,9 +18,10 @@ import java.time.format.DateTimeFormatter;
  * Created by Jibbow on 8/13/17.
  */
 public class TimeAxis extends GridPane {
-    private ObjectProperty<LocalTime> timeStartProperty;
-    private ObjectProperty<LocalTime> timeEndProperty;
-    private ObjectProperty<Duration> timeStepsProperty;
+    private final ObjectProperty<LocalTime> timeStartProperty;
+    private final ObjectProperty<LocalTime> timeEndProperty;
+    private final ObjectProperty<Duration> timeStepsProperty;
+    private final boolean horizontal;
     private DateTimeFormatter formatter;
 
 
@@ -37,38 +40,83 @@ public class TimeAxis extends GridPane {
         this.timeEndProperty = timeEnd;
         this.timeStepsProperty = timeSteps;
         this.formatter = formatter;
+        this.horizontal = false;
 
-        timeStartProperty.addListener(observable -> calculateRows());
-        timeEndProperty.addListener(observable -> calculateRows());
-        timeStepsProperty.addListener(observable -> calculateRows());
+        this.getStyleClass().add("time-axis");
 
-        calculateRows();
+        getTimeStartProperty().addListener(observable -> createLabels());
+        getTimeEndProperty().addListener(observable -> createLabels());
+        getTimeStepsProperty().addListener(observable -> createLabels());
+
+        createLabels();
     }
 
 
-    private void calculateRows() {
+    /**
+     * Creates or updates the actual layout of the time axis.
+     * The layout can either be horizontal or vertical.
+     * The GridView is populated with columns/rows and labels are added accordingly.
+     * The labels show the time between this.timeStartProperty and this.timeEndProperty with
+     * this.timeStepsProperty in between.
+     * The time is formatted according to this.formatter.
+     */
+    private void createLabels() {
         this.getChildren().clear();
         this.getRowConstraints().clear();
+        this.getColumnConstraints().clear();
 
-        for(LocalTime currentTime = timeStartProperty.get();
-            currentTime.isBefore(timeEndProperty.get()); ) {
+        for(LocalTime currentTime = getTimeStartProperty().get();
+            currentTime.isBefore(getTimeEndProperty().get()); ) {
 
-            RowConstraints row = new RowConstraints(0,0,Double.POSITIVE_INFINITY, Priority.SOMETIMES, VPos.TOP, true);
-            this.getRowConstraints().add(row);
+            // create a new label with the time
+            Label lblTime = new Label();
+            lblTime.setText(currentTime.format(getFormatter()));
+            lblTime.getStyleClass().add("time-axis-label");
 
-            Label indicator = new Label();
-            indicator.setText(currentTime.format(formatter));
-            indicator.getStyleClass().add("time-indicator-label");
+            // create a new row/column and add the label to it
+            if(horizontal) {
+                // center the label
+                lblTime.widthProperty().addListener(o -> lblTime.setTranslateX( -lblTime.widthProperty().getValue() / 2));
 
-            this.add(indicator, 0, this.getRowConstraints().size() - 1);
+                ColumnConstraints column = new ColumnConstraints(0, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.SOMETIMES, HPos.LEFT, true);
+                this.getColumnConstraints().add(column);
+                this.add(lblTime, this.getColumnConstraints().size() - 1, 0);
+            } else {
+                // center the label
+                lblTime.heightProperty().addListener(o -> lblTime.setTranslateY( -lblTime.heightProperty().getValue() / 2));
+                RowConstraints row = new RowConstraints(0, USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.SOMETIMES, VPos.TOP, true);
+                this.getRowConstraints().add(row);
+                this.add(lblTime, 0, this.getRowConstraints().size() - 1);
+            }
 
             // prevent overflows at midnight
-            LocalTime newTime = currentTime.plusMinutes(timeStepsProperty.get().toMinutes());
+            LocalTime newTime = currentTime.plusMinutes(getTimeStepsProperty().get().toMinutes());
             if(newTime.isAfter(currentTime)) {
                 currentTime = newTime;
             } else {
                 break;
             }
         }
+    }
+
+    public ObjectProperty<LocalTime> getTimeStartProperty() {
+        return timeStartProperty;
+    }
+
+    public ObjectProperty<LocalTime> getTimeEndProperty() {
+        return timeEndProperty;
+    }
+
+    public ObjectProperty<Duration> getTimeStepsProperty() {
+        return timeStepsProperty;
+    }
+
+    public DateTimeFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(DateTimeFormatter formatter) {
+        this.formatter = formatter;
+        createLabels();
     }
 }
