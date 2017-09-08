@@ -15,7 +15,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Jibbow on 8/13/17.
+ * This class represents a time axis which can either be horizontal or vertical.
+ * A time axis displays time values uniformly distributed between a start time
+ * and a end time.
+ * The start time, the end time and the interval between each value can be
+ * specified in the constructor but may be changed with the according properties.
  */
 public class TimeAxis extends GridPane {
     private final ObjectProperty<LocalTime> timeStartProperty;
