@@ -20,6 +20,11 @@ buildscript {
 
 apply plugin: 'java'
 
+dependencies {
+    // iCal parser
+    compile 'net.sf.biweekly:biweekly:0.6.1'
+}
+
 repositories {
     mavenLocal()
     mavenCentral()

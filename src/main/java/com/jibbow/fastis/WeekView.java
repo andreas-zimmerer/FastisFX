@@ -74,14 +74,14 @@ public class WeekView extends CalendarView {
         }
 
         setLayout();
-        setContent();
+        refreshContent();
 
         getDate().addListener(observable -> {
-            setContent();
+            refreshContent();
         });
 
         getCalendars().addListener((InvalidationListener) observable -> {
-            setContent();
+            refreshContent();
         });
     }
 
@@ -161,7 +161,7 @@ public class WeekView extends CalendarView {
     }
 
 
-    private void setContent() {
+    private void refreshContent() {
         this.weekHeaderContainer.getChildren().clear();
         this.timeAxisContainer.getChildren().clear();
         this.dayHeadersContainer.getChildren().clear();
@@ -229,6 +229,6 @@ public class WeekView extends CalendarView {
     }
 
     public void update() {
-        this.setContent();
+        this.refreshContent();
     }
 }

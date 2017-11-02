@@ -83,11 +83,11 @@ public class DayPane extends PercentPane {
         this.appointments = new HashMap<>();
 
         this.dayStartTimeProperty().addListener(observable -> {
-            appointments.keySet().forEach(this::addGuiElement);
+            appointments.keySet().forEach(appointment -> this.getChildren().add(this.createGuiElement(appointment)));
             renderer.layoutAppointments(appointments);
         });
         this.dayEndTimeProperty().addListener(observable -> {
-            appointments.keySet().forEach(this::addGuiElement);
+            appointments.keySet().forEach(appointment -> this.getChildren().add(this.createGuiElement(appointment)));
             renderer.layoutAppointments(appointments);
         });
     }
@@ -101,12 +101,13 @@ public class DayPane extends PercentPane {
      * @param appointment The appointment that should be added to the DayPane.
      */
     public void addAppointment(Appointment appointment) {
-        Region p = addGuiElement(appointment);
+        Region p = createGuiElement(appointment);
+        this.getChildren().add(p);
         appointments.put(appointment, p);
         renderer.layoutAppointments(appointments);
 
         appointment.intervalProperty().addListener(observable -> {
-            appointments.put(appointment, addGuiElement(appointment));
+            appointments.put(appointment, createGuiElement(appointment));
             renderer.layoutAppointments(appointments);
         });
     }
@@ -143,7 +144,7 @@ public class DayPane extends PercentPane {
      *          both because the appointments datetime is outside of the time constraints of the
      *          DayPane. Otherwise the new gui element is returned.
      */
-    protected Region addGuiElement(Appointment appointment) {
+    protected Region createGuiElement(Appointment appointment) {
         // check if there is an existing gui element
         Region region = appointments.getOrDefault(appointment, null);
 
@@ -178,7 +179,6 @@ public class DayPane extends PercentPane {
 
             PercentPane.setLeftAnchor(region, 0.0);
             PercentPane.setRightAnchor(region, 0.0);
-            this.getChildren().add(region);
             return region;
         } else {
             if(region != null) {
