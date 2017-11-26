@@ -21,7 +21,7 @@ public class ICalService {
      * @return
      */
     public List<Object> getCalendars() {
-
+        return null;
     }
 
     /**
